@@ -30,7 +30,7 @@ export function SiteHeader() {
           >
             GitHub
           </Button> */}
-          <ThemeSelector />
+          {/* <ThemeSelector /> */}
           <ModeToggle />
         </div>
       </div>

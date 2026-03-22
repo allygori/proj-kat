@@ -31,6 +31,7 @@ import { NavDocuments } from "@/components/dashboard/nav-documents"
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavSecondary } from "@/components/dashboard/nav-secondary"
 import { NavUser } from "@/components/dashboard/nav-user"
+import { mainNav } from "@/constant/menu"
 
 const data = {
   user: {
@@ -43,6 +44,11 @@ const data = {
       title: "Dashboard",
       url: "#",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Posts",
+      url: "/posts",
+      icon: List,
     },
     {
       title: "Lifecycle",
@@ -166,7 +172,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={mainNav} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
