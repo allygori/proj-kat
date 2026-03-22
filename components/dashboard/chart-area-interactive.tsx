@@ -176,7 +176,6 @@ export function ChartAreaInteractive() {
         </CardDescription>
         <CardAction>
           <ToggleGroup
-            type="multiple"
             value={[timeRange]}
             onValueChange={(v: any) => {
               if (v) setTimeRange(v)

@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { ModeToggle } from "@/app/(dashboard)/_components/mode-toggle"
-import { ThemeSelector } from "@/app/(dashboard)/_components/theme-selector"
+import { ModeToggle } from "@/components/dashboard/mode-toggle"
+import { ThemeSelector } from "@/components/dashboard/theme-selector"
 
 export function SiteHeader() {
   return (
@@ -30,8 +30,8 @@ export function SiteHeader() {
           >
             GitHub
           </Button> */}
-          {/* <ThemeSelector /> */}
-          {/* <ModeToggle /> */}
+          <ThemeSelector />
+          <ModeToggle />
         </div>
       </div>
     </header>

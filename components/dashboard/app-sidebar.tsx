@@ -27,10 +27,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavDocuments } from "@/app/(dashboard)/_components/nav-documents"
-import { NavMain } from "@/app/(dashboard)/_components/nav-main"
-import { NavSecondary } from "@/app/(dashboard)/_components/nav-secondary"
-import { NavUser } from "@/app/(dashboard)/_components/nav-user"
+import { NavDocuments } from "@/components/dashboard/nav-documents"
+import { NavMain } from "@/components/dashboard/nav-main"
+import { NavSecondary } from "@/components/dashboard/nav-secondary"
+import { NavUser } from "@/components/dashboard/nav-user"
 
 const data = {
   user: {
@@ -156,11 +156,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={<a href="#" />}
+              render={<a href="/dashboard" />}
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Box className="size-5!" />
-              <span className="text-base font-semibold">Acme Inc.</span>
+              <span className="text-base font-semibold">Katalis</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

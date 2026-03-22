@@ -1,6 +1,6 @@
 "use client"
 
-import { useThemeConfig } from "@/app/(dashboard)/_components/active-theme"
+import { useThemeConfig } from "@/components/dashboard/active-theme"
 import { Label } from "@/components/ui/label"
 import {
   Select,
