@@ -1,9 +1,7 @@
 "use client"
 
-import Link from 'next/link';
-import { PlusCircle, Mail, type LucideIcon } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import {  type LucideIcon } from "lucide-react"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -51,7 +49,7 @@ export function NavMain({
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
-                </Link>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

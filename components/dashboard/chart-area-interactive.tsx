@@ -177,8 +177,8 @@ export function ChartAreaInteractive() {
         <CardAction>
           <ToggleGroup
             value={[timeRange]}
-            onValueChange={(v: any) => {
-              if (v) setTimeRange(v)
+            onValueChange={(v: unknown) => {
+              if (v) setTimeRange(v as string)
             }}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"

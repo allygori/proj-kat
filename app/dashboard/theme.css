@@ -26,7 +26,7 @@ body {
   }
 }
 
-.theme-default,
+/* .theme-default,
 .theme-default-scaled {
   --primary: var(--color-neutral-600);
   --primary-foreground: var(--color-neutral-50);
@@ -68,18 +68,18 @@ body {
     --primary: var(--color-amber-500);
     --primary-foreground: var(--color-amber-50);
   }
-}
+} */
 
 .theme-mono,
 .theme-mono-scaled {
-  --font-sans: var(--font-mono);
+  /* --font-sans: var(--font-mono);
   --primary: var(--color-neutral-600);
   --primary-foreground: var(--color-neutral-50);
 
   @variant dark {
     --primary: var(--color-neutral-500);
     --primary-foreground: var(--color-neutral-50);
-  }
+  } */
 
   .rounded-xs,
   .rounded-sm,

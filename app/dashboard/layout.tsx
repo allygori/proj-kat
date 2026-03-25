@@ -7,8 +7,8 @@ import {
 import { ActiveThemeProvider } from "@/components/dashboard/active-theme"
 import { AppSidebar } from "@/components/dashboard/app-sidebar"
 import { SiteHeader } from "@/components/dashboard/site-header"
-import { TooltipProvider } from "@/components/ui/tooltip";
-
+import { TooltipProvider } from "@/components/ui/tooltip"
+import "./theme.css"
 
 export default async function DashboardLayout({
   children,

@@ -151,7 +151,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           checked={
             (table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() &&
-                "indeterminate")) as any
+                "indeterminate")) as unknown as boolean
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
@@ -369,6 +369,7 @@ export function DataTable({
     [data]
   )
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -501,9 +502,9 @@ export function DataTable({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       )
                     })}
