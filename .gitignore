@@ -25,6 +25,7 @@
 *.pem
 .trash
 *.txt
+rest-client
 
 # debug
 npm-debug.log*
