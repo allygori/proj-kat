@@ -3,22 +3,39 @@
 import { useMemo, useState } from 'react';
 import { PostCard } from './post-card';
 import { SearchFilter } from './search-filter';
-import { BlogPost } from '@/lib/mock-posts';
+import type { BlogPostType } from "./types"
+// import { ZodPostSchema, ZodMediaSchema, ZodUserSchema } from '@/lib/validations';
+// import { infer as zodInfer } from 'zod';
+
+// type BlogPost = zodInfer<typeof ZodPostSchema> & {
+//   featured_image: zodInfer<typeof ZodMediaSchema>;
+//   author: zodInfer<typeof ZodUserSchema>;
+// }
+
+
+
+
+// import { BlogPost } from '@/lib/mock-posts';
+
+// type BlogIndexClientProps = {
+//   posts: BlogPost[];
+//   categories: string[];
+// };
 
 type BlogIndexClientProps = {
-  posts: BlogPost[];
+  posts: BlogPostType[];
   categories: string[];
-};
+}
 
 export function BlogIndexClient({ posts, categories }: BlogIndexClientProps) {
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>(posts);
+  const [filteredPosts, setFilteredPosts] = useState<BlogPostType[]>(posts);
 
   const featuredPost = posts[0];
 
   const latestPosts = useMemo(() => {
     return filteredPosts
       .slice()
-      .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+      .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
   }, [filteredPosts]);
 
   const handleFiltered = (filtered: Array<{ slug: string; title: string; category: string; tags: string[] }>) => {
@@ -45,16 +62,16 @@ export function BlogIndexClient({ posts, categories }: BlogIndexClientProps) {
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <SearchFilter
+          {/* <SearchFilter
             posts={posts.map((post) => ({
               slug: post.slug,
               title: post.title,
-              category: post.category,
+              category: post.categories,
               tags: post.tags,
             }))}
             categories={categories}
             onFiltered={handleFiltered}
-          />
+          /> */}
         </aside>
 
         <main className="space-y-8">
@@ -67,7 +84,8 @@ export function BlogIndexClient({ posts, categories }: BlogIndexClientProps) {
                 {featuredPost.title}
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                {featuredPost.publishedAt.toLocaleDateString()} · {featuredPost.readingTime} min read · {featuredPost.category}
+                {new Date(featuredPost.published_at).toLocaleDateString()} · {featuredPost.reading_time} min read ·
+                {/* <span>{(featuredPost.categories).map((c) =)}</span> */}
               </p>
               <p className="text-slate-600 dark:text-slate-300">{featuredPost.excerpt}</p>
               <a
@@ -80,21 +98,16 @@ export function BlogIndexClient({ posts, categories }: BlogIndexClientProps) {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {latestPosts.map((post) => (
-              <PostCard
-                key={post.slug}
-                slug={post.slug}
-                title={post.title}
-                excerpt={post.excerpt}
-                featuredImage={post.featuredImage}
-                author={post.author}
-                publishedAt={post.publishedAt}
-                readingTime={post.readingTime}
-                category={post.category}
-                tags={post.tags}
-                featured={false}
-              />
-            ))}
+            {/* <pre>{JSON.stringify(latestPosts, null, 2)}</pre> */}
+            {
+              (latestPosts || []).map((post) => (
+                <PostCard
+                  key={post.slug}
+                  data={post}
+                  featured={false}
+                />
+              ))
+            }
           </div>
         </main>
       </div>

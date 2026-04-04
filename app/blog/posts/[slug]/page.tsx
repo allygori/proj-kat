@@ -1,22 +1,51 @@
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { mockPosts } from '@/lib/mock-posts';
-import { findRelatedPosts, extractTableOfContents, formatDate } from '@/lib/blog-utils';
+import { db } from '@/lib/db';
+import BlogPost from '@/models/blog-post';
+import { extractTableOfContents } from '@/lib/blog-utils';
 import { PostContent } from '@/components/blog/post-content';
 import { TableOfContents } from '@/components/blog/table-of-contents';
 import { ShareButtons } from '@/components/blog/share-buttons';
-import { RelatedPosts } from '@/components/blog/related-posts';
+// import { RelatedPosts } from '@/components/blog/related-posts';
+import type { BlogPostType } from "@/components/blog/types"
+import { formatDate } from '@/lib/format';
+
 
 type PostPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
-const getPostBySlug = (slug: string) => mockPosts.find((p) => p.slug === slug);
+
+// 1. Memoize the database fetch to avoid duplicate calls
+const getPostBySlug = cache(async (slug: string) => {
+  // connect to db
+  await db.connect();
+
+  console.log(`getPostBySlug, slug: ${slug}`)
+
+  return await await BlogPost
+    .findOne({ slug })
+    .populate("author", "name")
+    .populate("featured_image")
+    .populate("category", "name slug parent")
+    .populate("tags", "name slug")
+    .lean();
+});
+
+// const getPostBySlug = async (slug: string) => {
+//   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+//   const res = await fetch(`${baseUrl}/api/posts?slug=${slug}`, { next: { revalidate: 60 } });
+//   if (!res.ok) return null;
+//   const data = await res.json();
+//   return data.posts?.[0] || null;
+// };
 
 export async function generateMetadata({ params }: PostPageProps) {
-  const post = getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -24,27 +53,45 @@ export async function generateMetadata({ params }: PostPageProps) {
     };
   }
 
+  const title = post.metadata?.title || post.title;
+  const description = post.metadata?.description || post.excerpt;
+  const image = post.metadata?.image || post.featured_image;
+
   return {
-    title: `${post.title} | Katalis Dental`,
-    description: post.metaDescription,
+    title: `${title} | Katalis Dental`,
+    description: description,
     openGraph: {
-      title: `${post.title} | Katalis Dental`,
-      description: post.metaDescription,
-      images: [post.ogImage],
+      title: `${title} | Katalis Dental`,
+      description: description,
+      images: [image],
       type: 'article',
     },
   };
 }
 
-export default function PostPage({ params }: PostPageProps) {
-  const post = mockPosts.find((p) => p.slug === params.slug);
+export default async function PostPage({ params }: PostPageProps) {
+  const { slug } = await params;
+  const dbPost: BlogPostType = await getPostBySlug(slug);
 
-  if (!post) {
+  if (!dbPost) {
     return notFound();
   }
 
+  const post = {
+    title: dbPost.title,
+    slug: dbPost.slug,
+    body: dbPost.content || '',
+    excerpt: dbPost.excerpt || '',
+    featuredImage: dbPost.featured_image || { url: '' },
+    author: dbPost.author?.name || 'Unknown',
+    publishedAt: dbPost.published_at || dbPost.created_at,
+    readingTime: dbPost.reading_time || 5,
+    category: dbPost.categories?.[0]?.name || 'Uncategorized',
+    tags: dbPost.tags?.map((t: { name: string }) => t.name) || [],
+  };
+
   const tocItems = extractTableOfContents(post.body);
-  const relatedPosts = findRelatedPosts(post, mockPosts, 3);
+  const relatedPosts: unknown[] = []; // related posts can be added easily later via API fetch
 
   return (
     <section className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
@@ -62,7 +109,7 @@ export default function PostPage({ params }: PostPageProps) {
 
           <figure className="relative aspect-video overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-800">
             <Image
-              src={post.featuredImage}
+              src={post.featuredImage?.url}
               alt={post.title}
               fill
               className="object-cover"
@@ -95,7 +142,7 @@ export default function PostPage({ params }: PostPageProps) {
           </div>
 
           <div className="mt-10">
-            <RelatedPosts posts={relatedPosts} />
+            {/* <RelatedPosts posts={[]} /> */}
           </div>
         </section>
       </article>

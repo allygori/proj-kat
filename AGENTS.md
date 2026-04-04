@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Dentisry related blog and content management system
+# Dentistry related blog and content management system
 
 This file serves as the **single source of truth** and primary context document for any AI coding assistant (GitHub Copilot, Claude, OpenAI, Cursor, Continue.dev, etc.) working inside this repository. All code suggestions, file creations, refactors, and architectural decisions **must** strictly follow the requirements and philosophy outlined here.
 
@@ -15,8 +15,8 @@ This file serves as the **single source of truth** and primary context document 
 We are building a **fully custom, monolithic, highly flexible** content management system tailored for a professional dentistry blog. The client (a practicing dentist) wants to publish:
 - Opinion articles
 - Clinical case studies
-- Product reviews
-- Future affiliate content from Indonesian marketplaces (Tokopedia, Shopee, etc.)
+- Product reviews content
+- Affiliate content from Indonesian marketplaces (Tokopedia, Shopee, etc.)
 
 The system must feel **premium, trustworthy, and medical-grade** in UI/UX while being **extremely easy to customize** at the Admin Panel level — the exact reason we are **not** using Payload CMS (insufficient Admin UI flexibility).
 
@@ -82,7 +82,7 @@ The system must feel **premium, trustworthy, and medical-grade** in UI/UX while 
   - Title, slug (auto-generated + manual override)
   - Excerpt
   - Body (TipTap content blocks json)
-  - Featured image (from Media Library)
+  - Featured image (populated from Media Library)
   - Categories (hierarchical max 3 levels)
   - Tags (multi-select) (max 3, can create new tag from right-side drawer)
   - Author (linked to user)
@@ -112,12 +112,7 @@ The system must feel **premium, trustworthy, and medical-grade** in UI/UX while 
 │     ├── media/
 │     └── ...
 ├──── blog            # public blog routes
-│     ├── page.tsx
-│     ├── [slug]/
-│     ├── category/
-|     ├──── [category]/
-│     ├── tag/
-|     └──── [tag]/
+│     └── page.tsx
 ├──── api/              # only if needed (better-auth handles most)
 ├── components/
 │   ├── ui/             # shadcn components

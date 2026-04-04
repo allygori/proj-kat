@@ -46,20 +46,12 @@ export function RelatedPosts({
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        {posts.slice(0, 4).map((post) => (
+        {/* {posts.slice(0, 4).map((post) => (
           <PostCard
             key={post.slug}
-            slug={post.slug}
-            title={post.title}
-            excerpt={post.excerpt}
-            featuredImage={post.featuredImage}
-            author={post.author}
-            publishedAt={post.publishedAt}
-            readingTime={post.readingTime}
-            category={post.category}
-            tags={post.tags}
+            data={post}
           />
-        ))}
+        ))} */}
       </div>
     </section>
   );
