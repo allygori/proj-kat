@@ -1,6 +1,6 @@
 "use client"
 
-import { ChangeEvent, ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { ChangeEvent, ComponentProps, forwardRef, useImperativeHandle, useRef, useState } from "react"
 import { format, add, startOfDay } from "date-fns"
 
 import { cn } from "@/lib/utils"
@@ -18,7 +18,6 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
 
 const InputDateTime = forwardRef((props: ComponentProps<"input">, ref) => {
   const [date, setDate] = useState<string | undefined>(props.value as string)
-  const [displayValue, setDisplayValue] = useState<string | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -88,7 +87,7 @@ const InputDateTime = forwardRef((props: ComponentProps<"input">, ref) => {
             onBlur={props.onBlur}
             className={cn(props.className)}
             readOnly // Prevent manual typing to enforce picker usage for this example
-            value={displayValue}
+            value={date ? format(new Date(date), "PPP p") : ""}
           />
           <InputGroupAddon align="inline-end">
             {/* <Clock2Icon className="text-muted-foreground" /> */}
@@ -123,5 +122,7 @@ const InputDateTime = forwardRef((props: ComponentProps<"input">, ref) => {
     </>
   )
 })
+
+InputDateTime.displayName = "InputDateTime"
 
 export { InputDateTime }

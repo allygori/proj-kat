@@ -13,8 +13,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Katalis Dashboard",
-  description: "Content Management System",
+  title: "Katalis Dental",
+  description: "Professional dentistry blog and CMS for clinical insights and case studies.",
 };
 
 export default function RootLayout({
@@ -22,10 +22,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const scriptProps = typeof window === 'undefined' ? undefined : ({ type: 'application/json' } as const);
+
   return (
     <html lang="id" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <body className={`${plusJakarta.variable} font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider nonce="1111" scriptProps={scriptProps} attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
       </body>

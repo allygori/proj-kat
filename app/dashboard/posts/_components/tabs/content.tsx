@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 // import "@blocknote/core/fonts/inter.css"
 import { Block } from "@blocknote/core";
@@ -16,11 +16,8 @@ type Theme = "light" | "dark";
 
 const TabItemContent = () => {
   const editor = useCreateBlockNote()
-  const [blocks, setBlocks] = useState<Block[]>([])
+  const [blocks, setBlocks] = useState<Block[]>(editor.document)
   const { resolvedTheme = "light" } = useTheme()
-
-  // Sets the initial document JSON
-  useEffect(() => setBlocks(editor.document), [])
 
 
 

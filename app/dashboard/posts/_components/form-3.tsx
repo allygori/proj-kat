@@ -1,10 +1,8 @@
 "use client"
 
-import ContentBlock from "@/components/content-block/content-block"
-import { BlockData, SortableBlockProps } from "@/components/content-block/types"
-import { Button } from "@/components/ui/button"
+// import { useState } from "react"
+// import { BlockData, SortableBlockProps } from "@/components/content-block/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   Field,
   FieldDescription,
@@ -16,19 +14,15 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "@tanstack/react-form"
-import { CalendarIcon, ChevronDownIcon, Clock2Icon, Plus } from "lucide-react"
-import { useState } from "react"
+// import { CalendarIcon, ChevronDownIcon, Clock2Icon, Plus } from "lucide-react"
 import { toast } from "sonner"
 import z from "zod"
 import TabItemContent from "./tabs/content"
 import TabItemMetadata from "./tabs/metadata"
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { InputDateTime } from "@/components/ui/input-date-time"
 
-
-const formSchema = z.object({
+export const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   slug: z.string().min(1, "Slug is required"),
   excerpt: z.string(),
@@ -48,11 +42,11 @@ const formSchema = z.object({
 
 
 const Form3 = () => {
-  const [openCalendar, setOpenCalendar] = useState(false)
-  const [blocks, setBlocks] = useState<BlockData[]>([
-    { id: "1", type: "heading", content: {} },
-    { id: "2", type: "rich-text", content: {} },
-  ])
+  // const [openCalendar, setOpenCalendar] = useState(false)
+  // const [blocks, setBlocks] = useState<BlockData[]>([
+  //   { id: "1", type: "heading", content: {} },
+  //   { id: "2", type: "rich-text", content: {} },
+  // ])
 
   const form = useForm({
     defaultValues: {
@@ -75,7 +69,8 @@ const Form3 = () => {
     },
     onSubmit: async ({ value }) => {
       // Merge form values and React blocks state
-      const payload = { ...value, blocks }
+      const payload = { ...value }
+      // const payload = { ...value, blocks }
 
       toast("Draft Saved Successfully", {
         description: (
@@ -91,52 +86,52 @@ const Form3 = () => {
 
 
 
-  const items: SortableBlockProps[] = [
-    // { id: 1, value: '1', label: 'Standard 3-5 Days', description: 'Friday, 15 June - Tuesday, 19 June', price: 'Free' },
-    // { id: 2, value: '2', label: 'Express', description: 'Friday, 15 June - Sunday, 17 June', price: '$5.00' },
-    // { id: 3, value: '3', label: 'Overnight', description: 'Tomorrow', price: '$10.00' }
+  // const items: SortableBlockProps[] = [
+  //   // { id: 1, value: '1', label: 'Standard 3-5 Days', description: 'Friday, 15 June - Tuesday, 19 June', price: 'Free' },
+  //   // { id: 2, value: '2', label: 'Express', description: 'Friday, 15 June - Sunday, 17 June', price: '$5.00' },
+  //   // { id: 3, value: '3', label: 'Overnight', description: 'Tomorrow', price: '$10.00' }
 
-    {
-      id: '1',
-      block: {
-        id: '1',
-        type: "heading",
-        content: {
-          title: "Test 1",
-        }
-      }
-    },
-    {
-      id: '2',
-      block: {
-        id: '2',
-        type: "heading",
-        content: {
-          title: "Test 2",
-        }
-      }
-    },
-    {
-      id: '3',
-      block: {
-        id: '3',
-        type: "heading",
-        content: {
-          title: "Test 3",
-        }
-      }
-    },
-    {
-      id: '4',
-      block: {
-        id: '4',
-        type: "heading",
-        content: {
-          title: "Test 4",
-        }
-      }
-    }
-  ]
+  //   {
+  //     id: '1',
+  //     block: {
+  //       id: '1',
+  //       type: "heading",
+  //       content: {
+  //         title: "Test 1",
+  //       }
+  //     }
+  //   },
+  //   {
+  //     id: '2',
+  //     block: {
+  //       id: '2',
+  //       type: "heading",
+  //       content: {
+  //         title: "Test 2",
+  //       }
+  //     }
+  //   },
+  //   {
+  //     id: '3',
+  //     block: {
+  //       id: '3',
+  //       type: "heading",
+  //       content: {
+  //         title: "Test 3",
+  //       }
+  //     }
+  //   },
+  //   {
+  //     id: '4',
+  //     block: {
+  //       id: '4',
+  //       type: "heading",
+  //       content: {
+  //         title: "Test 4",
+  //       }
+  //     }
+  //   }
+  // ]
 
   return (
     <form
@@ -199,8 +194,8 @@ const Form3 = () => {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   // placeholder="A brief summary of the post..."
-                  className="resize-y"
-                  rows={3}
+                  className="resize-y min-h-24"
+                  rows={5}
                 />
                 <FieldDescription>
                   Used for blog previews and summaries.
