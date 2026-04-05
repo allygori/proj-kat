@@ -2,11 +2,17 @@
 import { betterAuth } from 'better-auth';
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 // import mongoose from "mongoose";
-import { db } from "@/lib/db"
+// import { db } from "@/lib/db"
+// const client = await db.getClient();
 
 
+import { MongoClient } from "mongodb";
 
-const client = await db.getClient();
+const client = new MongoClient(process.env.MONGODB_URI!);
+await client.connect();
+const db = client.db();
+
+
 
 // dbConnection.check();
 
@@ -15,7 +21,11 @@ const client = await db.getClient();
 // const db = client.db();
 
 export const auth = betterAuth({
-  database: mongodbAdapter(client),
+  // database: mongodbAdapter(client),
+  database: mongodbAdapter(db, {
+    // client,
+    // transaction: false // Disable if Replica Set is not available
+  }), // Pass both db and client for session stability
   user: {
     modelName: "users"
   },
@@ -26,10 +36,15 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    },
-  },
+  // socialProviders: {
+  //   google: {
+  //     clientId: process.env.GOOGLE_CLIENT_ID || '',
+  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+  //   },
+  // },
+  advanced: {
+    database: {
+      generateId: false
+    }
+  }
 });

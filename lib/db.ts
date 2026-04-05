@@ -57,6 +57,7 @@ const check = async () => {
 
 export async function getClient() {
   const MONGODB_URI = process.env.MONGODB_URI!;
+  console.log("getClient() MONGODB_URI", MONGODB_URI)
   const conn = await dbConnect();
 
   return conn.connection.getClient().db(MONGODB_URI);

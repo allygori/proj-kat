@@ -22,6 +22,6 @@ const UserSchema = new Schema(
   } // Automatically handles createdAt and updatedAt
 );
 
-const User = models.User || model('User', UserSchema);
+const User = models.User || model('User', UserSchema, 'users');
 
 export default User;

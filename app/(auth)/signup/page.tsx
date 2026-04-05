@@ -43,7 +43,7 @@ export default function SignupPage() {
     onSubmit: async ({ value }) => {
       setError(null);
       try {
-        const response = await fetch('/api/auth/sign-up', {
+        const response = await fetch('/api/auth/sign-up/email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -53,8 +53,12 @@ export default function SignupPage() {
           }),
         });
 
+        console.log("Signup client response", response)
+
         if (!response.ok) {
           const errorData = await response.json();
+          console.log("Signup client errorData", errorData)
+
           throw new Error(errorData.message || 'Sign up failed');
         }
 
