@@ -1,6 +1,21 @@
 import { isValidObjectId } from "mongoose";
 import { z } from "zod";
 
+export const ZodUserSchema = z.object({
+  // better-auth fields
+  email: z.email(),
+  name: z.string(),
+  image: z.string().optional(),
+  emailVerified: z.boolean(),
+  // Custom fields
+  role: z.enum(['admin', 'editor', 'author']).default("author"),
+  username: z.string().optional(),
+  deleted_at: z.date().optional(), // soft delete
+  createdAt: z.date().optional(), // Use `created_at` to store the created date
+  updatedAt: z.date().optional() // and `updated_at` to store the last updated date
+})
+
+
 export const ZodTipTapContentBlockSchema = z.object({
   type: z.string().min(1, "Content block type is required"), // e.g., 'paragraph', 'heading', 'image'
   attrs: z.object(), // e.g., { src: '...' }
@@ -72,11 +87,11 @@ export const ZodMediaSchema = z.object({
   credits: z.string(),
 });
 
-export const ZodUserSchema = z.object({
-  email: z.string(),
-  name: z.string(),
-  image: z.number(),
-  role: z.string(),
-});
+// export const ZodUserSchema = z.object({
+//   email: z.string(),
+//   name: z.string(),
+//   image: z.number(),
+//   role: z.string(),
+// });
 
 
