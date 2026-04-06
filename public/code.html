@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#e1e2e7",
+              "outline": "#717880",
+              "secondary": "#356668",
+              "tertiary-container": "#255f80",
+              "on-surface-variant": "#41474f",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#3c6c6e",
+              "primary-container": "#1b5e8c",
+              "on-error-container": "#93000a",
+              "background": "#f8f9fd",
+              "surface": "#f8f9fd",
+              "secondary-fixed-dim": "#9ecfd1",
+              "surface-container-low": "#f2f3f8",
+              "secondary-container": "#b9ecee",
+              "on-background": "#191c1f",
+              "on-primary-fixed-variant": "#004a75",
+              "inverse-primary": "#94ccff",
+              "inverse-on-surface": "#eff0f5",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-high": "#e7e8ec",
+              "surface-container-highest": "#e1e2e7",
+              "surface-dim": "#d9dade",
+              "tertiary": "#004766",
+              "on-tertiary-fixed": "#001e2e",
+              "surface-bright": "#f8f9fd",
+              "on-primary": "#ffffff",
+              "surface-tint": "#226391",
+              "primary": "#00466e",
+              "outline-variant": "#c1c7d0",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed-variant": "#064c6b",
+              "on-primary-container": "#abd6ff",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed": "#c7e7ff",
+              "on-tertiary-container": "#a3d8fe",
+              "error-container": "#ffdad6",
+              "secondary-fixed": "#b9ecee",
+              "primary-fixed": "#cde5ff",
+              "on-secondary-fixed": "#002021",
+              "on-error": "#ffffff",
+              "surface-container": "#edeef2",
+              "on-primary-fixed": "#001d32",
+              "on-surface": "#191c1f",
+              "on-secondary-fixed-variant": "#1a4e50",
+              "primary-fixed-dim": "#94ccff",
+              "inverse-surface": "#2e3134",
+              "tertiary-fixed-dim": "#98cdf2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Newsreader"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Newsreader', serif; background-color: #f8f9fd; color: #191c1f; }
+        h1, h2, h3, h4, nav, button { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl">
+<div class="flex justify-between items-center h-20 px-8 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tight text-sky-900 dark:text-sky-100">
+                Restorative Canvas
+            </div>
+<div class="hidden md:flex items-center space-gap-8 gap-x-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 dark:hover:text-sky-200 font-label text-sm uppercase tracking-wider" href="#">Hygiene</a>
+<a class="text-sky-900 dark:text-sky-300 font-bold border-b-2 border-sky-800 dark:border-sky-400 pb-1 font-label text-sm uppercase tracking-wider" href="#">Wellness</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 dark:hover:text-sky-200 font-label text-sm uppercase tracking-wider" href="#">Cosmetic</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 dark:hover:text-sky-200 font-label text-sm uppercase tracking-wider" href="#">Surgery</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors rounded-full text-sky-900">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-2 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors rounded-full text-sky-900">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-20">
+<!-- Hero Header -->
+<header class="relative w-full h-[614px] md:h-[768px] flex items-end pb-12 md:pb-24 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Clean minimalist dental clinic interior with soft lighting" class="w-full h-full object-cover" data-alt="Modern minimalist clinical setting with soft blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLaw50hohmBYPTGNh0fjDWuDml0cgGPzK7QadXgqikNdQnBpqaP0Fp9NAO1RqVJ1wfqyrZJJlGxaDlEUcKlNzfzD0rXCV-fiAyiZ6ZlkZJIuAsHvC_w27_U7etYNcY-jI50tV6k7ZnrEhCBSz1smwO5S6UJfDBo7WkYZ4CnPl_76cjZmVfi8PRh1PxBJtnJvM35X-ZTxH75kjFpNQJGs2uLnXTF_35uDiHKVb1dYkEgXHi3gU9Sng6VLhLIWtzGTF5EyX7EMyYB04"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto px-6 w-full">
+<div class="inline-block bg-secondary-fixed-dim text-on-secondary-fixed px-4 py-1 rounded-full text-sm font-label mb-6">
+                    Wellness &amp; Longevity
+                </div>
+<h1 class="text-4xl md:text-6xl font-extrabold text-on-surface tracking-tight leading-tight mb-6">
+                    Beyond The Surface: The Link Between Oral Health and Systemic Vitality
+                </h1>
+<div class="flex items-center gap-4 text-outline font-label text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 24, 2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 8 min read</span>
+</div>
+</div>
+</header>
+<!-- Article Body -->
+<article class="max-w-3xl mx-auto px-6 py-12">
+<div class="prose prose-lg dark:prose-invert font-body text-on-surface-variant leading-relaxed space-y-8">
+<p class="text-xl md:text-2xl text-on-surface font-light italic border-l-4 border-primary-container pl-6 py-2">
+                    "Dental health is often viewed as a localized concern, yet modern science reveals it as a foundational pillar of entire body wellness."
+                </p>
+<p>
+                    For decades, the mouth was treated as an isolated chamber, disconnected from the complex machinery of the human cardiovascular and immune systems. However, restorative dentistry today acknowledges a profound truth: the inflammatory markers found in periodontal disease are the very same indicators linked to heart disease, diabetes, and even cognitive decline.
+                </p>
+<h2 class="font-headline text-3xl font-bold text-primary mt-12 mb-4">The Microbiome Connection</h2>
+<p>
+                    Within our mouths exists a delicate ecosystem of bacteria known as the oral microbiome. When this balance shifts—due to diet, stress, or neglect—the resulting inflammation doesn't stay localized. Pathogens can enter the bloodstream, triggering systemic immune responses that tax the body's natural restorative cycles.
+                </p>
+<div class="my-16 bg-surface-container-low rounded-xl p-8 md:p-12 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-headline text-xl font-bold text-secondary mb-4">Clinical Insight: The C-Reactive Protein</h3>
+<p class="text-base">
+                            Studies consistently show that patients with active gum inflammation exhibit higher levels of C-reactive protein (CRP). Reducing oral inflammation through professional hygiene and restorative care has been shown to lower systemic CRP levels, effectively acting as a preventative measure for long-term health.
+                        </p>
+</div>
+</div>
+<p>
+                    At Restorative Canvas, we believe every cleaning and every procedure is more than just cosmetic maintenance. It is an act of systemic preservation. By utilizing precision-guided diagnostics and biocompatible materials, we ensure that your dental intervention supports your body’s holistic architecture.
+                </p>
+</div>
+<!-- Author Bio Section -->
+<section class="mt-24 pt-12 border-t-0 border-outline-variant/20 bg-surface-container-low rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center md:items-start">
+<img alt="Dr. Elena Vance" class="w-24 h-24 rounded-full object-cover grayscale" data-alt="Professional headshot of a female dentist doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkfhfHD1gxwLOG2d9mt7jrwKKrvKvfKL1Cm3LtOMqWwDWUtodLsTDITrhjTQwoWL36t43FWKHfvccFn53Jv6J3SiKLdF-Vq5Zl2rLIJ4_v79roC2F5mViFpXk2oFxD7P2z69LZ3bT0zFmk6mfjc80wa0i_Mye3xc0_tRcUCHbruNcb6ydL8Seqo0cSoY78mxpTXw7IBVgoXmHL4Znn2-82-jZFFEcxIsLIO-gB7RxbJ8ZJlOGm82yKgkwFxpsCDAa2m_Ylmac6F-o"/>
+<div class="flex-1 text-center md:text-left">
+<h4 class="font-headline font-bold text-xl text-primary mb-2">Dr. Elena Vance</h4>
+<p class="font-body text-on-surface-variant mb-4">
+                        Chief Medical Editor at Restorative Canvas. Dr. Vance specializes in integrative dentistry, focusing on the biological intersection between oral pathogens and cardiovascular health.
+                    </p>
+<div class="flex justify-center md:justify-start gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:text-surface-tint transition-colors">alternate_email</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-surface-tint transition-colors">public</span>
+</div>
+</div>
+</section>
+<!-- Comments Section -->
+<section class="mt-24">
+<h3 class="font-headline text-2xl font-bold mb-8">Reflections &amp; Discussion</h3>
+<div class="space-y-10">
+<!-- Individual Comment -->
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+<div class="flex-1 bg-surface-container-lowest p-6 rounded-xl">
+<div class="flex justify-between items-center mb-2">
+<span class="font-headline font-bold text-sm">Marcus Thorne</span>
+<span class="text-xs text-outline font-label">2 days ago</span>
+</div>
+<p class="font-body text-on-surface-variant">
+                                Truly fascinating to see the clinical link between inflammation and CRP levels. This makes my quarterly cleanings feel much more essential than just 'getting my teeth polished.'
+                            </p>
+<button class="mt-4 text-xs font-label text-primary uppercase tracking-widest flex items-center gap-1 hover:opacity-70">
+<span class="material-symbols-outlined text-sm">reply</span> Reply
+                            </button>
+</div>
+</div>
+<!-- Comment Input -->
+<div class="mt-12">
+<label class="block font-headline font-bold text-sm mb-4">Add your perspective</label>
+<textarea class="w-full rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 p-4 font-body min-h-[120px]" placeholder="Share your thoughts..."></textarea>
+<div class="mt-4 flex justify-end">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-3 rounded-full font-label text-sm uppercase tracking-wider hover:shadow-lg transition-all active:scale-95">
+                                Post Comment
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</article>
+<!-- Related Articles (Asymmetric Grid) -->
+<section class="max-w-7xl mx-auto px-6 py-24 bg-surface-container-low mt-24">
+<h2 class="font-headline text-3xl font-bold mb-12 text-center">Continuing Your Journey</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Related Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500">
+<div class="h-48 overflow-hidden">
+<img alt="Advanced dental equipment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Closeup of high-tech dental lasers and equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTGWjquxY6WceK6-AluyDLJshMLIx2Dw-oOyVkDBd_TLNsa5mgIR9YjojIe3szahv0Tk35qqfLdnXNxBSacRhtEB6BsrDOA0drhV0vt_uOEs1rLceAwzE12aXe82AZXhSb2-gfc63T7-mfGb86WfM78KSW9RMd05ZNHm9eY864GyHlvXMGMoDmymxdfbsJxbUUHPc3IeN0Ol1fjmTQ_2nii5XNJ43005FAUTFyw557JXLimyCIRvqtQfD-AUayfMbx-cPUaCAFwC4"/>
+</div>
+<div class="p-6">
+<span class="text-xs font-label text-secondary uppercase tracking-widest">Technology</span>
+<h3 class="font-headline font-bold text-lg mt-2 group-hover:text-primary transition-colors">Precision Lasers: The End of The Drill?</h3>
+<p class="font-body text-sm mt-3 line-clamp-2">Explore how minimally invasive laser technology is reshaping patient comfort and recovery times.</p>
+</div>
+</div>
+<!-- Related Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 md:translate-y-8">
+<div class="h-48 overflow-hidden">
+<img alt="Organic wellness items" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Organic toothpaste and bamboo toothbrush arrangement" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsKs6mY-ecNrivop44OHD-QlHN0vVSFwrPL4U2GvS93rDuF4k9Pa5qhWII2JVonCizdqFNrUMlb1mA5t3EvhzS1mChfQJXbKFE27s06y3ZhhlIbnxmEBSo7lHFTE9Oz4usOjhnCTXrjTudE9IkySbWebgOT5Ff6j6mwKYeCxs6P6XEBtbzygONBGLUX1Yzss-tlf8JEs0ydb8CR1AHs1I8Ea26-Mz77ffwn53ly8qsGR-TBQj-yaBYc-Vzn_ZBKwOg8LYGdpzjhyE"/>
+</div>
+<div class="p-6">
+<span class="text-xs font-label text-secondary uppercase tracking-widest">Lifestyle</span>
+<h3 class="font-headline font-bold text-lg mt-2 group-hover:text-primary transition-colors">The Bio-Availability of Enamel Repair</h3>
+<p class="font-body text-sm mt-3 line-clamp-2">How nutrition and topical agents work together to naturally remineralize tooth structure.</p>
+</div>
+</div>
+<!-- Related Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500">
+<div class="h-48 overflow-hidden">
+<img alt="Doctor consultation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Professional doctor discussing records with a patient" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYYsiyEYZI-MO6gXz4nXWW6fJminsg1kx1YaITzxHJ99GUKT_2YmZBJqgfT2k4CMlUhaeGptx8LaLe-kkkFswXvXCr7g08VoRONsomM2LDSNsyeP94DU66aFyi5nhN6kQiD3xJmlHjeaKteQN9bZ1OFyRKDH-sK9apsb6dbTP__j9IRmnTUtrFgzF-TEaNEFtq40PWQR6MsIfS7EecQ93Ategwd4EaJ5Rn_3-Fj1l3PQo3NoxPXVbav6bAwHkfw7gOY2XMQSfc17o"/>
+</div>
+<div class="p-6">
+<span class="text-xs font-label text-secondary uppercase tracking-widest">Surgery</span>
+<h3 class="font-headline font-bold text-lg mt-2 group-hover:text-primary transition-colors">The Aesthetic of Structural Integrity</h3>
+<p class="font-body text-sm mt-3 line-clamp-2">Why modern dental implants are more about architecture than simple mechanics.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-t-[2rem] mt-24 bg-slate-50 dark:bg-slate-950">
+<div class="flex flex-col md:flex-row justify-between items-start gap-12 px-12 py-20 max-w-7xl mx-auto">
+<div class="max-w-xs">
+<div class="text-xl font-bold text-sky-900 dark:text-sky-100 mb-6">Restorative Canvas</div>
+<p class="font-body text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                    Elevating the clinical experience through high-end design and biological integrity. Dental wellness, redefined for the modern life.
+                </p>
+</div>
+<div class="grid grid-cols-2 gap-x-16 gap-y-4">
+<a class="font-label text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-all" href="#">Privacy Policy</a>
+<a class="font-label text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-all" href="#">Terms of Service</a>
+<a class="font-label text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-all" href="#">Medical Disclaimer</a>
+<a class="font-label text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-all" href="#">Contact</a>
+</div>
+<div class="w-full md:w-auto text-left md:text-right border-t md:border-t-0 pt-8 md:pt-0 border-slate-200 dark:border-slate-800">
+<p class="font-label text-xs text-slate-400 uppercase tracking-widest">
+                    © 2024 Restorative Canvas. Dental Wellness Redefined.
+                </p>
+</div>
+</div>
+</footer>
+</body></html>
