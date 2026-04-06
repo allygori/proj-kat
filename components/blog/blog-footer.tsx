@@ -1,28 +1,22 @@
-'use client';
+// Reference: AGENTS.md § 3.1 — Blog footer, Bahasa Indonesia
 
 import Link from 'next/link';
 import { Mail, Linkedin, Twitter } from 'lucide-react';
-
-/**
- * Blog Footer Component
- * Refined minimalist footer with links, copyright, and social media.
- * 
- * See AGENTS.md § 3.1 for blog design requirements.
- */
 
 export function BlogFooter() {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    'Blog': [
-      { label: 'All Posts', href: '/blog' },
-      { label: 'Categories', href: '/blog' },
-      { label: 'Archives', href: '/blog' },
+    Tulisan: [
+      { label: 'Semua Tulisan', href: '/' },
+      { label: 'Studi Kasus', href: '/blog/category/studi-kasus' },
+      { label: 'Ulasan Produk', href: '/blog/category/ulasan-produk' },
+      { label: 'Opini', href: '/blog/category/opini' },
     ],
-    'Company': [
-      { label: 'About', href: '#about' },
-      { label: 'Contact', href: '#contact' },
-      { label: 'Privacy', href: '#privacy' },
+    Lainnya: [
+      { label: 'Tentang', href: '/about' },
+      { label: 'Kontak', href: '#kontak' },
+      { label: 'Kebijakan Privasi', href: '#privasi' },
     ],
   };
 
@@ -33,32 +27,43 @@ export function BlogFooter() {
   ];
 
   return (
-    <footer className="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <footer className="border-t border-[#E2EDF2] bg-white dark:border-slate-800 dark:bg-slate-950">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Footer Content */}
-        <div className="grid grid-cols-2 gap-8 py-16 sm:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-8 py-12 sm:grid-cols-4 lg:grid-cols-5">
           {/* Branding */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold text-slate-900 dark:text-white">
-              Katalis Dental
-            </h3>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              Premium dental insights and clinical expertise.
+            <div className="flex items-center gap-2">
+              <div
+                className="flex h-7 w-7 items-center justify-center rounded-md"
+                style={{ background: '#155E88' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 13L8 3L13 13" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M5 9.5h6" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
+                Katalis
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              Tulisan dan catatan klinis dari dokter gigi yang suka berbagi.
             </p>
           </div>
 
           {/* Link Sections */}
           {Object.entries(footerLinks).map(([section, links]) => (
             <div key={section} className="sm:col-span-1">
-              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {section}
               </h4>
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-4 space-y-2.5">
                 {links.map((link, idx) => (
                   <li key={idx}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                      className="text-sm text-slate-600 transition-colors hover:text-[#155E88] dark:text-slate-400 dark:hover:text-[#a9dbdc]"
                     >
                       {link.label}
                     </Link>
@@ -70,10 +75,10 @@ export function BlogFooter() {
 
           {/* Social Links */}
           <div className="col-span-2 sm:col-span-1 lg:col-span-1">
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
-              Follow
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              Ikuti
             </h4>
-            <div className="mt-4 flex gap-4">
+            <div className="mt-4 flex gap-2">
               {socialLinks.map((social, idx) => {
                 const Icon = social.icon;
                 return (
@@ -81,9 +86,9 @@ export function BlogFooter() {
                     key={idx}
                     href={social.href}
                     aria-label={social.label}
-                    className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                    className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-[#E8F4F8] hover:text-[#155E88] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#a9dbdc]"
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4" />
                   </Link>
                 );
               })}
@@ -91,10 +96,10 @@ export function BlogFooter() {
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-slate-200 py-8 dark:border-slate-800">
-          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-            © {currentYear} Katalis Dental. All rights reserved.
+        {/* Bottom */}
+        <div className="border-t border-[#E2EDF2] py-6 dark:border-slate-800">
+          <p className="text-center text-xs text-slate-400 dark:text-slate-500">
+            © {currentYear} Katalis. Semua hak dilindungi.
           </p>
         </div>
       </div>

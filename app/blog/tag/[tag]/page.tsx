@@ -1,86 +1,101 @@
+// Reference: AGENTS.md § 3.4 — Tag listing page with MongoDB fetch
+
 import { notFound } from 'next/navigation';
-import { PostCard } from '@/components/blog/post-card';
-import { SearchFilter } from '@/components/blog/search-filter';
-// import { categories, mockPosts } from '@/constant/seed/tags';
+import { db } from '@/lib/db';
+import BlogPost from '@/models/blog-post';
+import Tag from '@/models/tag';
+import { PostIndexRow } from '@/components/blog/post-index-row';
+import type { BlogPostType } from '@/components/blog/types';
 
 type TagPageProps = {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 };
 
-export function generateMetadata({ params }: TagPageProps) {
-  const tag = decodeURIComponent(params.tag);
+export async function generateMetadata({ params }: TagPageProps) {
+  const { tag: slug } = await params;
   return {
-    title: `#${tag} Articles | Katalis Dental`,
-    description: `Explore articles tagged with ${tag}.`,
+    title: `#${slug} — Katalis`,
+    description: `Artikel berlabel #${slug} dari Katalis.`,
   };
 }
 
-export default function TagPage({ params }: TagPageProps) {
-  // const tagName = decodeURIComponent(params.tag);
+export default async function TagPage({ params }: TagPageProps) {
+  const { tag: slug } = await params;
+  await db.connect();
 
-  // const filtered = mockPosts.filter((post) => post.tags.includes(tagName));
+  const tagDoc = await Tag.findOne({ slug, deleted_at: null }).lean();
 
-  // if (filtered.length === 0) {
-  //   return notFound();
-  // }
+  if (!tagDoc) {
+    notFound();
+  }
 
-  // return (
-  //   <div className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
-  //     <section className="space-y-6 text-center">
-  //       <p className="text-xs font-semibold uppercase tracking-widest text-indigo-600">
-  //         Tag
-  //       </p>
-  //       <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-  //         #{tagName}
-  //       </h1>
-  //       <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-  //         Explore tagged articles for related concepts and treatments.
-  //       </p>
-  //     </section>
+  const posts = await BlogPost.find({
+    tags: { $in: [tagDoc._id] },
+    published_status: 'published',
+    deleted_at: null,
+  })
+    .sort({ published_at: -1 })
+    .limit(50)
+    .populate('author', 'name')
+    .populate('featured_image')
+    .populate('category', 'name slug parent')
+    .populate('tags', 'name slug')
+    .lean();
 
-  //     <div className="mt-12 grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
-  //       <aside className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-  //         <SearchFilter
-  //           posts={mockPosts.map((post) => ({
-  //             slug: post.slug,
-  //             title: post.title,
-  //             category: post.category,
-  //             tags: post.tags,
-  //           }))}
-  //           categories={categories}
-  //           onFiltered={() => {
-  //             // no-op in tag context
-  //           }}
-  //         />
-  //       </aside>
-
-  //       <main className="space-y-8">
-  //         <div className="grid gap-6 md:grid-cols-2">
-  //           {filtered.map((post) => (
-  //             <PostCard
-  //               key={post.slug}
-  //               slug={post.slug}
-  //               title={post.title}
-  //               excerpt={post.excerpt}
-  //               featuredImage={post.featuredImage}
-  //               author={post.author}
-  //               publishedAt={post.publishedAt}
-  //               readingTime={post.readingTime}
-  //               category={post.category}
-  //               tags={post.tags}
-  //             />
-  //           ))}
-  //         </div>
-
-  //         <p className="text-sm text-slate-500 dark:text-slate-400">
-  //           Showing {filtered.length} article(s) with #{tagName}.
-  //         </p>
-  //       </main>
-  //     </div>
-  //   </div>
-  // );
+  const data: BlogPostType[] = JSON.parse(JSON.stringify(posts ?? []));
+  const tag = JSON.parse(JSON.stringify(tagDoc));
 
   return (
-    <div>Empty</div>
-  )
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+      {/* Tag header */}
+      <div className="border-b border-[#E2EDF2] pb-8 pt-10 dark:border-slate-800">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#155E88]/60">
+          Tag
+        </p>
+        <h1
+          className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl"
+          style={{ letterSpacing: '-0.02em' }}
+        >
+          #{tag.name}
+        </h1>
+        {tag.description && (
+          <p className="mt-3 max-w-xl text-base text-slate-500 dark:text-slate-400">
+            {tag.description}
+          </p>
+        )}
+        <p className="mt-2 text-xs text-slate-400">
+          {data.length} {data.length === 1 ? 'tulisan' : 'tulisan'}
+        </p>
+      </div>
+
+      {/* Column headers */}
+      <div className="mb-1 hidden items-center gap-4 border-b-2 border-[#155E88]/10 pb-2 pt-6 sm:flex sm:gap-5">
+        <span className="w-20 shrink-0 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Tanggal
+        </span>
+        <span className="h-14 w-14 shrink-0" />
+        <span className="hidden w-32 shrink-0 text-xs font-semibold uppercase tracking-wider text-slate-400 md:block">
+          Spesialisasi
+        </span>
+        <span className="flex-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Judul
+        </span>
+      </div>
+
+      {/* Post list */}
+      {data.length > 0 ? (
+        <div>
+          {data.map((post) => (
+            <PostIndexRow key={post.slug} post={post} />
+          ))}
+        </div>
+      ) : (
+        <div className="py-20 text-center">
+          <p className="text-sm text-slate-400">
+            Belum ada tulisan dengan tag ini.
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }

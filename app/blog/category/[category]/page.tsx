@@ -1,86 +1,95 @@
+// Reference: AGENTS.md § 3.4 — Category listing page with MongoDB fetch
+// Pattern: same as blog/page.tsx — direct Mongoose query
+
 import { notFound } from 'next/navigation';
-import { PostCard } from '@/components/blog/post-card';
-import { SearchFilter } from '@/components/blog/search-filter';
-// import { mockPosts, categories } from '@/constant/seed/categories';
+import { db } from '@/lib/db';
+import BlogPost from '@/models/blog-post';
+import Category from '@/models/category';
+import { PostIndexRow } from '@/components/blog/post-index-row';
+import { CategoryHero } from '@/components/blog/category-hero';
+import type { BlogPostType } from '@/components/blog/types';
 
 type CategoryPageProps = {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 };
 
-export function generateMetadata({ params }: CategoryPageProps) {
-  // const categoryName = decodeURIComponent(params.category);
-  // return {
-  //   title: `${categoryName} Articles | Katalis Dental`,
-  //   description: `Explore articles and real-world case studies in ${categoryName}.`,
-  // };
+export async function generateMetadata({ params }: CategoryPageProps) {
+  const { category: slug } = await params;
+  const name = decodeURIComponent(slug)
+    .split('-')
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(' ');
+
+  return {
+    title: `${name} — Katalis`,
+    description: `Kumpulan artikel tentang ${name} dari dokter gigi praktisi.`,
+    openGraph: {
+      title: `${name} — Katalis`,
+      description: `Kumpulan artikel tentang ${name} dari dokter gigi praktisi.`,
+    },
+  };
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  // const categoryName = decodeURIComponent(params.category);
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category: slug } = await params;
+  await db.connect();
 
-  // if (!categories.includes(categoryName)) {
-  //   return notFound();
-  // }
+  // Find the category document by slug
+  const categoryDoc = await Category.findOne({ slug, deleted_at: null }).lean();
 
-  // const filtered = mockPosts.filter((post) => post.category === categoryName);
+  if (!categoryDoc) {
+    notFound();
+  }
 
-  // return (
-  //   <div className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
-  //     <section className="space-y-6 text-center">
-  //       <p className="text-xs font-semibold uppercase tracking-widest text-indigo-600">
-  //         Category
-  //       </p>
-  //       <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-  //         {categoryName}
-  //       </h1>
-  //       <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-  //         Explore deeply-researched articles in {categoryName}. Updated frequently with actionable clinical insights.
-  //       </p>
-  //     </section>
+  const posts = await BlogPost.find({
+    category: categoryDoc._id,
+    published_status: 'published',
+    deleted_at: null,
+  })
+    .sort({ published_at: -1 })
+    .limit(50)
+    .populate('author', 'name')
+    .populate('featured_image')
+    .populate('category', 'name slug parent')
+    .populate('tags', 'name slug')
+    .lean();
 
-  //     <div className="mt-12 grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
-  //       <aside className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-  //         <SearchFilter
-  //           posts={mockPosts.map((post) => ({
-  //             slug: post.slug,
-  //             title: post.title,
-  //             category: post.category,
-  //             tags: post.tags,
-  //           }))}
-  //           categories={categories}
-  //           onFiltered={() => {
-  //             // no-op for now in this category page
-  //           }}
-  //         />
-  //       </aside>
-
-  //       <main className="space-y-8">
-  //         <div className="grid gap-6 md:grid-cols-2">
-  //           {filtered.map((post) => (
-  //             <PostCard
-  //               key={post.slug}
-  //               slug={post.slug}
-  //               title={post.title}
-  //               excerpt={post.excerpt}
-  //               featuredImage={post.featuredImage}
-  //               author={post.author}
-  //               publishedAt={post.publishedAt}
-  //               readingTime={post.readingTime}
-  //               category={post.category}
-  //               tags={post.tags}
-  //             />
-  //           ))}
-  //         </div>
-
-  //         <p className="text-sm text-slate-500 dark:text-slate-400">
-  //           Showing {filtered.length} article(s) in {categoryName}.
-  //         </p>
-  //       </main>
-  //     </div>
-  //   </div>
-  // );
+  const data: BlogPostType[] = JSON.parse(JSON.stringify(posts ?? []));
+  const category = JSON.parse(JSON.stringify(categoryDoc));
 
   return (
-    <div>Empty</div>
-  )
+    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+      {/* Category hero block */}
+      <CategoryHero category={category} postCount={data.length} />
+
+      {/* Column headers */}
+      <div className="mb-1 hidden items-center gap-4 border-b-2 border-[#155E88]/10 pb-2 sm:flex sm:gap-5">
+        <span className="w-20 shrink-0 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Tanggal
+        </span>
+        <span className="h-14 w-14 shrink-0" />
+        <span className="hidden w-32 shrink-0 text-xs font-semibold uppercase tracking-wider text-slate-400 md:block">
+          Spesialisasi
+        </span>
+        <span className="flex-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Judul
+        </span>
+      </div>
+
+      {/* Post list */}
+      {data.length > 0 ? (
+        <div>
+          {data.map((post) => (
+            <PostIndexRow key={post.slug} post={post} />
+          ))}
+        </div>
+      ) : (
+        <div className="py-20 text-center">
+          <p className="text-sm text-slate-400">
+            Belum ada tulisan dalam kategori ini.
+          </p>
+        </div>
+      )}
+    </div>
+  );
 }

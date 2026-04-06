@@ -13,8 +13,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Katalis Dental",
-  description: "Professional dentistry blog and CMS for clinical insights and case studies.",
+  title: "Katalis — Jurnal & Catatan Klinis Dokter Gigi",
+  description: "Tulisan tentang pengalaman klinis, opini, ulasan alat dan bahan, serta studi kasus nyata dari praktik sehari-hari seorang dokter gigi.",
 };
 
 export default function RootLayout({
