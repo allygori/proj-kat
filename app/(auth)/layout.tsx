@@ -2,6 +2,10 @@
 import { ReactNode } from 'react';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
+  const year = new Date().getFullYear();
+
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4">
       <div className="w-full max-w-md">
@@ -18,7 +22,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-sm mt-6">
-          © 2026 Katalis. All rights reserved.
+          © {year} Katalis. All rights reserved.
         </p>
       </div>
     </div>

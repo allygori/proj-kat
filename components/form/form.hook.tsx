@@ -8,7 +8,7 @@ import { createFormHookContexts } from '@tanstack/react-form'
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts()
 
 
-const TextField = lazy(() => import('../ui/input').then(m => ({ default: m.Input })))
+const TextField = lazy(() => import('../form/fields/input').then(m => ({ default: m.InputField })))
 
 function SubscribeButton({ label }: { label: string }) {
   const form = useFormContext()

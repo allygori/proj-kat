@@ -26,9 +26,9 @@ export const mainNav = [
     icon: FileText,
   },
   {
-    title: "Lifecycle",
-    url: "#",
-    icon: List,
+    title: "Media Storage",
+    url: "/dashboard/media",
+    icon: Database,
   },
   {
     title: "Analytics",
