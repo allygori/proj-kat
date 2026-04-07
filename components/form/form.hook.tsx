@@ -9,22 +9,29 @@ export const { fieldContext, useFieldContext, formContext, useFormContext } = cr
 
 
 const TextField = lazy(() => import('../form/fields/input').then(m => ({ default: m.InputField })))
+const TextareaField = lazy(() => import('../form/fields/textarea').then(m => ({ default: m.TextareaField })))
+const SelectField = lazy(() => import('../form/fields/select').then(m => ({ default: m.SelectField })))
 
-function SubscribeButton({ label }: { label: string }) {
-  const form = useFormContext()
-  return (
-    <form.Subscribe selector={(state) => state.isSubmitting}>
-      {(isSubmitting) => <button disabled={isSubmitting}>{label}</button>}
-    </form.Subscribe>
-  )
-}
+const SubmitButton = lazy(() => import('../form/button/submit-button').then(m => ({ default: m.SubmitButton })))
+
+// function SubscribeButton({ text }: { text: string }) {
+//   const form = useFormContext()
+//   return (
+//     <form.Subscribe selector={(state) => state.isSubmitting}>
+//       {(isSubmitting) => <button disabled={isSubmitting}>{text}</button>}
+//     </form.Subscribe>
+//   )
+// }
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldComponents: {
     TextField,
+    TextareaField,
+    SelectField
   },
   formComponents: {
-    SubscribeButton,
+    // SubscribeButton,
+    SubmitButton,
   },
   fieldContext,
   formContext,

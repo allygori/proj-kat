@@ -12,6 +12,7 @@ import {
   Search,
   Settings,
   Users,
+  LayoutGrid,
 } from "lucide-react"
 
 export const mainNav = [
@@ -24,6 +25,11 @@ export const mainNav = [
     title: "Posts",
     url: "/dashboard/posts",
     icon: FileText,
+  },
+  {
+    title: "Category",
+    url: "/dashboard/categories",
+    icon: LayoutGrid,
   },
   {
     title: "Media Storage",
