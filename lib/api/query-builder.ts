@@ -29,7 +29,8 @@ export interface QueryOptions {
 /**
  * Parse query params from the request URL.
  *
- * Supports: ?page=1&limit=10&sort=-created_at&search=keyword&key=value
+ * Supports: ?page=1&limit=10&sort=-created_at&search=keyword&key=value OR
+ * ?page=1&limit=10&sort=-created_at&q=keyword&key=value
  */
 export function parseQueryParams(
   request: NextRequest,
@@ -62,7 +63,7 @@ export function parseQueryParams(
   }
 
   // Search
-  const search = params.get("search") || undefined;
+  const search = params.get("search") || params.get("q") || undefined;
 
   // Filters — only allow specific keys
   const filters: Record<string, unknown> = {};

@@ -1,41 +1,61 @@
-import { NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import Category from "@/models/category";
 import { ZodCategorySchema } from "@/lib/validations";
+import { apiSuccess, apiError, ErrorCodes } from "@/lib/api/response";
+import { validateBody } from "@/lib/api/validator";
+import { parseQueryParams, paginatedQuery } from "@/lib/api/query-builder";
 import { headers } from "next/headers";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    const categories = await Category.find({ deleted_at: { $exists: false } }).sort({ name: 1 });
-    return NextResponse.json({ categories });
+
+    const queryOptions = parseQueryParams(request, {
+      allowedFilters: ["parent", "level"],
+      allowedSorts: ["name", "created_at", "updated_at"],
+      searchFields: ["name", "description"],
+    });
+
+    const { data, meta } = await paginatedQuery(
+      Category,
+      { deleted_at: { $exists: false } },
+      queryOptions,
+      {
+        searchFields: ["name", "description"],
+        populate: ["parent"],
+      }
+    );
+
+    return apiSuccess(data, meta);
   } catch (error) {
     console.error("GET /api/categories error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal mengambil data kategori");
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk membuat kategori", 401);
     }
 
     await dbConnect();
-    const body = await request.json();
-    const validatedData = ZodCategorySchema.parse(body);
 
-    const category = await Category.create(validatedData);
-
-    return NextResponse.json({ category }, { status: 201 });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("POST /api/categories error:", error);
-    if (error?.name === "ZodError") {
-      return NextResponse.json({ error: error.errors }, { status: 400 });
+    const validation = await validateBody(request, ZodCategorySchema);
+    if (!validation.success) {
+      return validation.error;
     }
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
+    const body = validation.data;
+    const category = await Category.create(body);
+
+    return apiSuccess(category, undefined, 201);
+  } catch (error) {
+    console.error("POST /api/categories error:", error);
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal membuat kategori");
   }
 }
+
