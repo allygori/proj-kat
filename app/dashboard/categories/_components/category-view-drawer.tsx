@@ -91,7 +91,7 @@ export function CategoryViewDrawer({ item, children }: CategoryViewDrawerProps) 
           </div>
 
           <div className="flex flex-col gap-2 pt-6">
-            <Button className="w-full" onClick={() => window.location.href = `/dashboard/posts/${item._id}/edit`}>
+            <Button className="w-full" onClick={() => window.location.href = `/dashboard/categories/${item._id}/edit`}>
               Open in Full Editor
             </Button>
             <Button variant="outline" className="w-full" onClick={() => window.open(`/blog/${item.slug}`, '_blank')}>

@@ -10,5 +10,5 @@ import { CategoryTableWrapper } from "./_components/category-table-wrapper"
  * Using the refactored Sortable Data Table for Drag & Drop functionality.
  */
 export default function CategoryIndexPage() {
-  return <CategoryTableWrapper isSortable={true} />
+  return <CategoryTableWrapper isSortable={false} />
 }

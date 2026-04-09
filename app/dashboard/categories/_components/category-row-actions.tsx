@@ -26,7 +26,7 @@ export function CategoryRowActions({ row, onDelete }: CategoryRowActionsProps) {
       if (onDelete) {
         onDelete(id)
       } else {
-        const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Failed to delete');
         toast.success('Artikel deleted successfully');
         window.location.reload();
@@ -48,10 +48,10 @@ export function CategoryRowActions({ row, onDelete }: CategoryRowActionsProps) {
         <span className="sr-only">Open menu</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem onClick={() => window.location.href = `/dashboard/posts/${row.original._id}/edit`}>
+        <DropdownMenuItem onClick={() => window.location.href = `/dashboard/categories/${row.original._id}/edit`}>
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => window.open(`/blog/posts/${row.original.slug}`, '_blank')}>
+        <DropdownMenuItem onClick={() => window.open(`/blog/categories/${row.original.slug}`, '_blank')}>
           View Live
         </DropdownMenuItem>
         <DropdownMenuSeparator />

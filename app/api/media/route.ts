@@ -1,55 +1,49 @@
-import { NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import dbConnect from "@/lib/db";
 import Media from "@/models/media";
 import { put, del } from "@vercel/blob";
+import { apiSuccess, apiError, ErrorCodes } from "@/lib/api/response";
+import { parseQueryParams, paginatedQuery } from "@/lib/api/query-builder";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     await dbConnect();
     
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk mengakses galeri media", 401);
     }
 
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const page = parseInt(searchParams.get("page") || "1");
-    const skip = (page - 1) * limit;
-
-    const query = { deleted_at: { $exists: false } };
-
-    const media = await Media.find(query)
-      .populate("uploaded_by", "name email image")
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    const total = await Media.countDocuments(query);
-
-    return NextResponse.json({ 
-      media,
-      pagination: {
-        total,
-        pages: Math.ceil(total / limit),
-        page,
-        limit
-      }
+    const queryOptions = parseQueryParams(request, {
+      allowedFilters: ["folder", "mime_type", "uploaded_by"],
+      allowedSorts: ["created_at", "updated_at", "size", "filename"],
+      searchFields: ["original_name", "alt_text", "caption"],
     });
 
+    const { data, meta } = await paginatedQuery(
+      Media,
+      { deleted_at: { $exists: false } },
+      queryOptions,
+      {
+        searchFields: ["original_name", "alt_text", "caption"],
+        populate: [{ path: "uploaded_by", select: "name email image" }],
+      }
+    );
+
+    return apiSuccess(data, meta);
   } catch (error) {
     console.error("GET /api/media error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal mengambil data media");
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk mengunggah media", 401);
     }
 
     const formData = await request.formData();
@@ -59,16 +53,15 @@ export async function POST(request: Request) {
     const folder = formData.get("folder") as string || "general";
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return apiError(ErrorCodes.BAD_REQUEST, "File tidak ditemukan", 400);
     }
 
     // Upload to Vercel Blob
-    // Optional: add folder path to filename
     const filename = folder ? `${folder}/${file.name}` : file.name;
     
     const blob = await put(filename, file, { 
       access: "public",
-      addRandomSuffix: true // Avoid overwriting files with the same name
+      addRandomSuffix: true
     });
 
     await dbConnect();
@@ -86,33 +79,32 @@ export async function POST(request: Request) {
       uploaded_by: session.user.id
     });
 
-    return NextResponse.json({ media }, { status: 201 });
-
+    return apiSuccess(media, undefined, 201);
   } catch (error) {
     console.error("POST /api/media error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal mengunggah media");
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk menghapus media", 401);
     }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ error: "Media ID is required" }, { status: 400 });
+      return apiError(ErrorCodes.BAD_REQUEST, "ID media diperlukan", 400);
     }
 
     await dbConnect();
     
     const media = await Media.findById(id);
     if (!media) {
-      return NextResponse.json({ error: "Media not found" }, { status: 404 });
+      return apiError(ErrorCodes.NOT_FOUND, "Media tidak ditemukan", 404);
     }
 
     // Delete from Vercel Blob
@@ -124,13 +116,10 @@ export async function DELETE(request: Request) {
     media.deleted_at = new Date();
     await media.save();
     
-    // Hard delete alternative if you prefer:
-    // await Media.findByIdAndDelete(id);
-
-    return NextResponse.json({ success: true, message: "Media deleted successfully" });
-
+    return apiSuccess({ success: true, message: "Media berhasil dihapus" });
   } catch (error) {
     console.error("DELETE /api/media error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal menghapus media");
   }
 }
+

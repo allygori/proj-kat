@@ -1,38 +1,45 @@
-import { NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import Tag from "@/models/tag";
 import { ZodTagSchema } from "@/lib/validations";
+import { apiSuccess, apiError, ErrorCodes } from "@/lib/api/response";
+import { validateBody } from "@/lib/api/validator";
 import { headers } from "next/headers";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await dbConnect();
     const { id } = await params;
     const tag = await Tag.findOne({ _id: id, deleted_at: { $exists: false } });
 
     if (!tag) {
-      return NextResponse.json({ error: "Tag not found" }, { status: 404 });
+      return apiError(ErrorCodes.NOT_FOUND, "Tag tidak ditemukan", 404);
     }
 
-    return NextResponse.json({ tag });
+    return apiSuccess(tag);
   } catch (error) {
     console.error("GET /api/tags/[id] error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal mengambil data tag");
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk mengubah tag", 401);
     }
 
     await dbConnect();
     const { id } = await params;
-    const body = await request.json();
-    const validatedData = ZodTagSchema.partial().parse(body);
+
+    const validation = await validateBody(request, ZodTagSchema.partial());
+    if (!validation.success) {
+      return validation.error;
+    }
+
+    const validatedData = validation.data;
 
     const tag = await Tag.findOneAndUpdate(
       { _id: id, deleted_at: { $exists: false } },
@@ -41,25 +48,21 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     );
 
     if (!tag) {
-      return NextResponse.json({ error: "Tag not found" }, { status: 404 });
+      return apiError(ErrorCodes.NOT_FOUND, "Tag tidak ditemukan", 404);
     }
 
-    return NextResponse.json({ tag });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+    return apiSuccess(tag);
+  } catch (error) {
     console.error("PATCH /api/tags/[id] error:", error);
-    if (error?.name === "ZodError") {
-      return NextResponse.json({ error: error.errors }, { status: 400 });
-    }
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal memperbarui tag");
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk menghapus tag", 401);
     }
 
     await dbConnect();
@@ -72,12 +75,13 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     );
 
     if (!tag) {
-      return NextResponse.json({ error: "Tag not found" }, { status: 404 });
+      return apiError(ErrorCodes.NOT_FOUND, "Tag tidak ditemukan", 404);
     }
 
-    return NextResponse.json({ success: true });
+    return apiSuccess({ success: true });
   } catch (error) {
     console.error("DELETE /api/tags/[id] error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return apiError(ErrorCodes.INTERNAL_ERROR, "Gagal menghapus tag");
   }
 }
+

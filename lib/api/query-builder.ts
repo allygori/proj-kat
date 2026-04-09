@@ -3,7 +3,7 @@
  */
 
 import { type NextRequest } from "next/server";
-import type { Document, Model, QueryFilter } from "mongoose";
+import { type Document, type Model, type QueryFilter, type PopulateOptions } from "mongoose";
 
 const config = {
   pagination: {
@@ -87,7 +87,8 @@ export async function paginatedQuery<T extends Document>(
   queryOptions: QueryOptions,
   options?: {
     searchFields?: string[];
-    populate?: string | string[];
+    populate?: string | string[] | PopulateOptions | PopulateOptions[];
+    select?: string | string[] | Record<string, number | boolean | object>;
   }
 ) {
   let filter: QueryFilter<T> = { ...baseFilter };
@@ -108,19 +109,20 @@ export async function paginatedQuery<T extends Document>(
   const total_pages = Math.ceil(total / queryOptions.limit);
   const skip = (queryOptions.page - 1) * queryOptions.limit;
 
-  let query = model
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let query: any = model
     .find(filter)
     .sort(queryOptions.sort)
     .skip(skip)
     .limit(queryOptions.limit);
 
+  if (options?.select) {
+    query = query.select(options.select);
+  }
+
   if (options?.populate) {
-    const fields = Array.isArray(options.populate)
-      ? options.populate
-      : [options.populate];
-    for (const field of fields) {
-      query = query.populate(field);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    query = query.populate(options.populate as any);
   }
 
   const data = await query.lean().exec();

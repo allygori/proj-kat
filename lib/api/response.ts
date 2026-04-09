@@ -53,6 +53,7 @@ export function apiError(
  * Common error codes
  */
 export const ErrorCodes = {
+  BAD_REQUEST: "BAD_REQUEST",
   VALIDATION_ERROR: "VALIDATION_ERROR",
   NOT_FOUND: "NOT_FOUND",
   UNAUTHORIZED: "UNAUTHORIZED",

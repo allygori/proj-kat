@@ -28,7 +28,7 @@ export function CategoryTableWrapper({ isSortable = false }: CategoryTableWrappe
       setData(json.data || [])
     } catch (err) {
       console.error(err);
-      toast.error('Failed to load posts')
+      toast.error('Failed to load categories')
     } finally {
       setIsLoading(false)
     }
@@ -46,14 +46,14 @@ export function CategoryTableWrapper({ isSortable = false }: CategoryTableWrappe
         <div className="w-full flex-col justify-start gap-6 space-y-4">
           <div className="flex items-center justify-between px-4 lg:px-6">
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold">Articles</h1>
+              <h1 className="text-xl font-bold">Category</h1>
               <Badge variant="secondary">{data.length}</Badge>
             </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => window.location.href = '/dashboard/posts/create'}
+                onClick={() => window.location.href = '/dashboard/categories/create'}
               >
                 <Plus className="size-4 mr-2" />
                 <span className="hidden lg:inline">Create Post</span>
