@@ -1,14 +1,22 @@
 "use client"
 
 import * as React from "react"
-import { CategoryTableWrapper } from "./_components/category-table-wrapper"
+import { CollectionShell } from "@/components/dashboard/collection/shell"
+import { getCategoryColumns } from "./_components/category-columns"
 
-/**
- * CategoryIndexPage
- * This page serves as the index for managing articles/blog posts 
- * (referred to as categories in the current navigation structure).
- * Using the refactored Sortable Data Table for Drag & Drop functionality.
- */
 export default function CategoryIndexPage() {
-  return <CategoryTableWrapper isSortable={false} />
+  const columns = React.useMemo(() => getCategoryColumns(true), []) as any
+
+  return (
+    <CollectionShell
+      title="Categories"
+      endpoint="/api/categories"
+      columns={columns}
+      searchFields={["name", "slug", "description"]}
+      primarySearchField="name"
+      createUrl="/dashboard/categories/create"
+      createText="Add Category"
+      isSortable={true}
+    />
+  )
 }

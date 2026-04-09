@@ -1,13 +1,22 @@
-import { PostList } from "@/app/dashboard/posts/_components/list"
+"use client"
 
-const PostsPage = () => {
+import * as React from "react"
+import { CollectionShell } from "@/components/dashboard/collection/shell"
+import { getPostColumns } from "./_components/post-columns"
+
+export default function PostIndexPage() {
+  const columns = React.useMemo(() => getPostColumns(false), []) as any
+
   return (
-    <div className="@container/main flex flex-1 flex-col gap-2">
-      <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-        <PostList />
-      </div>
-    </div>
+    <CollectionShell
+      title="Articles"
+      endpoint="/api/posts"
+      columns={columns}
+      searchFields={["title", "slug", "excerpt"]}
+      primarySearchField="title"
+      createUrl="/dashboard/posts/create"
+      createText="Create Post"
+      isSortable={false}
+    />
   )
 }
-
-export default PostsPage

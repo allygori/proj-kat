@@ -1,14 +1,15 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { GripVertical } from "lucide-react"
+import { CheckCircle2, Loader2, GripVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { CategoryType } from "@/components/blog/types"
-import { CollectionRowActions } from "@/components/dashboard/collection/row-actions"
+import { BlogPostType, CategoryType, UserType } from "@/components/blog/types"
+import { CategoryRowActions } from "../../categories/_components/category-row-actions"
+import { CategoryViewDrawer } from "../../categories/_components/category-view-drawer"
 
 // Drag handle component for sortable columns
 function DragHandle({ id }: { id: string }) {
@@ -27,8 +28,8 @@ function DragHandle({ id }: { id: string }) {
   )
 }
 
-export const getCategoryColumns = (isSortable: boolean = false): ColumnDef<CategoryType>[] => {
-  const baseColumns: ColumnDef<CategoryType>[] = [
+export const getPostColumns = (isSortable: boolean = false): ColumnDef<BlogPostType>[] => {
+  const baseColumns: ColumnDef<BlogPostType>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -57,37 +58,48 @@ export const getCategoryColumns = (isSortable: boolean = false): ColumnDef<Categ
       enableHiding: false,
     },
     {
-      accessorKey: "name",
-      header: "Category Name",
+      accessorKey: "title",
+      header: "Article Title",
       cell: ({ row }) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">{row.original.name}</span>
-          {row.original.description && (
-            <span className="text-xs text-muted-foreground line-clamp-1">{row.original.description}</span>
-          )}
-        </div>
+        <CategoryViewDrawer item={row.original}>
+          <Button variant="link" className="w-fit px-0 text-left text-foreground font-semibold underline-offset-4 hover:underline">
+            {row.original.title}
+          </Button>
+        </CategoryViewDrawer>
       ),
       enableHiding: false,
     },
     {
-      accessorKey: "slug",
-      header: "URL Slug",
+      accessorKey: "category.name",
+      header: "Category",
       cell: ({ row }) => (
-        <code className="text-xs bg-muted px-1 rounded">{row.original.slug}</code>
+        <div className="w-32">
+          <Badge variant="outline" className="px-1.5 text-muted-foreground">
+            {(row.original.category as unknown as CategoryType)?.name || "Uncategorized"}
+          </Badge>
+        </div>
       ),
     },
     {
-      accessorKey: "parent.name",
-      header: "Parent",
+      accessorKey: "published_status",
+      header: "Status",
       cell: ({ row }) => (
-        <div className="w-32">
-          {row.original.parent ? (
-            <Badge variant="outline" className="px-1.5 text-muted-foreground">
-              {row.original.parent.name}
-            </Badge>
+        <Badge variant="outline" className="gap-2 px-1.5 text-muted-foreground capitalize">
+          {row.original.published_status === "published" ? (
+            <CheckCircle2 className="size-3 fill-green-500 dark:fill-green-400" />
           ) : (
-            <span className="text-xs text-muted-foreground">None</span>
+            <Loader2 className="size-3 animate-spin" />
           )}
+          {row.original.published_status}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: "author.name",
+      header: "Author",
+      cell: ({ row }) => (
+        <div className="text-sm font-medium">
+          {(row.original.author as unknown as UserType)?.name || "Unknown"}
         </div>
       ),
     },
@@ -102,14 +114,7 @@ export const getCategoryColumns = (isSortable: boolean = false): ColumnDef<Categ
     },
     {
       id: "actions",
-      cell: ({ row }) => (
-        <CollectionRowActions 
-          row={row} 
-          label="Category"
-          endpoint="/api/categories"
-          editUrl="/dashboard/categories"
-        />
-      ),
+      cell: ({ row }) => <CategoryRowActions row={row} />,
     },
   ]
 
