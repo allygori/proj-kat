@@ -70,7 +70,7 @@ export function MediaUploadDialog() {
       <DialogTrigger render={
         <Button className="rounded-full px-6 bg-primary shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
           <UploadCloud className="mr-2 h-4 w-4" />
-          Upload Baru
+          Upload
         </Button>
       } />
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">

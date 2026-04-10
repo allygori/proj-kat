@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { MediaGrid } from './_components/media-grid';
 import { MediaUploadDialog } from './_components/media-upload-dialog';
 import { MediaDetailsSheet } from './_components/media-details-sheet';
-import { LayoutGrid, Images, Trash2, Settings2 } from 'lucide-react';
+import { LayoutGrid, Images, Trash2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function MediaPage() {
@@ -24,18 +24,18 @@ export default function MediaPage() {
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-[0.2em] animate-in slide-in-from-left-4 duration-500">
             <Images className="h-4 w-4" />
-            Clinical Assets
+            Assets Manager
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-             Media Library
+            Media Library
           </h1>
           <p className="text-slate-500 font-medium max-w-lg dark:text-slate-400">
-             Manage Clinical Case Studies, Clinical Opini, and Multimedia Content for the Blog.
+            Manage image, documents and many other assets.
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3 animate-in slide-in-from-right-4 duration-500">
-           <MediaUploadDialog />
+          <MediaUploadDialog />
         </div>
       </div>
 
@@ -55,20 +55,20 @@ export default function MediaPage() {
         <TabsContent value="all" className="mt-0 focus-visible:outline-none">
           <MediaGrid onEdit={handleEdit} />
         </TabsContent>
-        
+
         <TabsContent value="trash" className="mt-0 focus-visible:outline-none">
-           <div className="flex flex-col items-center justify-center p-24 border border-dashed rounded-3xl bg-slate-50 dark:bg-slate-900">
-              <Trash2 className="h-10 w-10 text-slate-300 mb-4" />
-              <p className="text-slate-500 font-medium italic">Trashed assets will appear here (Future Update)</p>
-           </div>
+          <div className="flex flex-col items-center justify-center p-24 border border-dashed rounded-3xl bg-slate-50 dark:bg-slate-900">
+            <Trash2 className="h-10 w-10 text-slate-300 mb-4" />
+            <p className="text-slate-500 font-medium italic">Trashed assets will appear here (Future Update)</p>
+          </div>
         </TabsContent>
       </Tabs>
 
       {/* Sheet for editing details */}
-      <MediaDetailsSheet 
-        asset={editingAsset} 
-        open={sheetOpen} 
-        onOpenChange={setSheetOpen} 
+      <MediaDetailsSheet
+        asset={editingAsset}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
       />
     </div>
   );

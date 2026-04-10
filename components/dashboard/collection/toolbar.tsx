@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CollectionViewOptions } from "./view-options"
 
-interface CollectionToolbarProps<TData> {
+type CollectionToolbarProps<TData> = {
   table: Table<TData>
   searchFields?: string[] // Multiple fields to search in (placeholder for global filter)
   primarySearchField?: string // The field currently tied to the search input

@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-interface CollectionViewOptionsProps<TData> {
+type CollectionViewOptionsProps<TData> = {
   table: Table<TData>
 }
 

@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-interface CollectionPaginationProps<TData> {
+type CollectionPaginationProps<TData> = {
   table: Table<TData>
 }
 

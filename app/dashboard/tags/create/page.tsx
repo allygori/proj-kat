@@ -1,6 +1,6 @@
 "use client";
 
-import CategoryForm from "../_components/category.form";
+import CategoryForm from "../_components/tag.form";
 
 import { toast } from "sonner";
 import { z } from "zod";
@@ -11,27 +11,16 @@ const ZodCategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   slug: z.string().min(1, "Slug is required"),
   description: z.string(),
-  parent: z.string(),
-  // level: z.number().min(1).max(3).optional(),
 });
 
 const defaultValues: z.input<typeof ZodCategorySchema> = {
   name: "",
   slug: "",
   description: "",
-  parent: "",
 };
 
 const CreateCategoryPage = () => {
   const form = useAppForm({
-    // Supports all useForm options
-    // defaultValues: {
-    //   name: "",
-    //   slug: "",
-    //   description: "",
-    //   // parent: "",
-    //   // level: 0,
-    // },
     defaultValues,
     validationLogic: revalidateLogic(),
     validators: {
@@ -59,8 +48,8 @@ const CreateCategoryPage = () => {
     <div className="@container/main flex flex-1 flex-col gap-2">
       <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
         <div>
-          <h2 className="font-semibold mb-0">Tambah Kategori</h2>
-          <p className="font-normal text-sm">Tambahkan kategori baru yang belum ada sebelumnya.</p>
+          <h2 className="font-semibold mb-0">Tambah Tag</h2>
+          <p className="font-normal text-sm">Tambahkan tag baru yang belum ada sebelumnya.</p>
         </div>
         <CategoryForm form={form} />
       </div>

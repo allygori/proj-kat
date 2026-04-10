@@ -13,6 +13,7 @@ import {
   Settings,
   Users,
   LayoutGrid,
+  TagIcon,
 } from "lucide-react"
 
 export const mainNav = [
@@ -32,74 +33,79 @@ export const mainNav = [
     icon: LayoutGrid,
   },
   {
-    title: "Media Storage",
-    url: "/dashboard/media",
-    icon: Database,
+    title: "Tag",
+    url: "/dashboard/tags",
+    icon: TagIcon,
   },
-  {
-    title: "Analytics",
-    url: "#",
-    icon: BarChart3,
-  },
-  {
-    title: "Projects",
-    url: "#",
-    icon: Folder,
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: Users,
-  },
+  // {
+  //   title: "Media Storage",
+  //   url: "/dashboard/media",
+  //   icon: Database,
+  // },
+  // {
+  //   title: "Analytics",
+  //   url: "#",
+  //   icon: BarChart3,
+  // },
+  // {
+  //   title: "Projects",
+  //   url: "#",
+  //   icon: Folder,
+  // },
+  // {
+  //   title: "Team",
+  //   url: "#",
+  //   icon: Users,
+  // },
 ]
 
 export const cloudsNav = [
-  {
-    title: "Capture",
-    icon: Camera,
-    isActive: true,
-    url: "#",
-    items: [
-      {
-        title: "Active Proposals",
-        url: "#",
-      },
-      {
-        title: "Archived",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Proposal",
-    icon: FileText,
-    url: "#",
-    items: [
-      {
-        title: "Active Proposals",
-        url: "#",
-      },
-      {
-        title: "Archived",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Prompts",
-    icon: FileJson,
-    url: "#",
-    items: [
-      {
-        title: "Active Proposals",
-        url: "#",
-      },
-      {
-        title: "Archived",
-        url: "#",
-      },
-    ],
-  },
+  // {
+  //   title: "Capture",
+  //   icon: Camera,
+  //   isActive: true,
+  //   url: "#",
+  //   items: [
+  //     {
+  //       title: "Active Proposals",
+  //       url: "#",
+  //     },
+  //     {
+  //       title: "Archived",
+  //       url: "#",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Proposal",
+  //   icon: FileText,
+  //   url: "#",
+  //   items: [
+  //     {
+  //       title: "Active Proposals",
+  //       url: "#",
+  //     },
+  //     {
+  //       title: "Archived",
+  //       url: "#",
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Prompts",
+  //   icon: FileJson,
+  //   url: "#",
+  //   items: [
+  //     {
+  //       title: "Active Proposals",
+  //       url: "#",
+  //     },
+  //     {
+  //       title: "Archived",
+  //       url: "#",
+  //     },
+  //   ],
+  // },
 ]
 
 export const secondaryNav = [
@@ -108,11 +114,11 @@ export const secondaryNav = [
     url: "#",
     icon: Settings,
   },
-  {
-    title: "Get Help",
-    url: "#",
-    icon: HelpCircle,
-  },
+  // {
+  //   title: "Get Help",
+  //   url: "#",
+  //   icon: HelpCircle,
+  // },
   {
     title: "Search",
     url: "#",
@@ -122,18 +128,23 @@ export const secondaryNav = [
 
 export const documentsNav = [
   {
-    name: "Data Library",
-    url: "#",
+    name: "Media Storage",
+    url: "/dashboard/media",
     icon: Database,
   },
-  {
-    name: "Reports",
-    url: "#",
-    icon: FileBarChart,
-  },
-  {
-    name: "Word Assistant",
-    url: "#",
-    icon: FileText,
-  },
+  // {
+  //   name: "Data Library",
+  //   url: "#",
+  //   icon: Database,
+  // },
+  // {
+  //   name: "Reports",
+  //   url: "#",
+  //   icon: FileBarChart,
+  // },
+  // {
+  //   name: "Word Assistant",
+  //   url: "#",
+  //   icon: FileText,
+  // },
 ]

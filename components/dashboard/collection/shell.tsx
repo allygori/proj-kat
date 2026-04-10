@@ -19,7 +19,7 @@ import { toast } from "sonner"
 import { CollectionHeader } from "./header"
 import { CollectionTable } from "./table"
 
-interface CollectionShellProps<TData extends { _id: string }> {
+type CollectionShellProps<TData extends { _id: string }> = {
   title: string
   endpoint: string
   columns: ColumnDef<TData, any>[]
@@ -104,10 +104,10 @@ export function CollectionShell<TData extends { _id: string }>({
     <div className="@container/main flex flex-1 flex-col gap-2">
       <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
         <div className="w-full flex-col justify-start gap-6 space-y-4">
-          <CollectionHeader 
-            title={title} 
-            count={data.length} 
-            createUrl={createUrl} 
+          <CollectionHeader
+            title={title}
+            count={data.length}
+            createUrl={createUrl}
             createText={createText}
           />
           <div className="px-4 lg:px-6">

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-interface CollectionRowActionsProps<TData extends { _id: string, slug?: string }> {
+type CollectionRowActionsProps<TData extends { _id: string, slug?: string }> = {
   row: Row<TData>
   editUrl?: string
   viewUrl?: string
@@ -22,12 +22,12 @@ interface CollectionRowActionsProps<TData extends { _id: string, slug?: string }
   label?: string
 }
 
-export function CollectionRowActions<TData extends { _id: string, slug?: string }>({ 
-  row, 
-  editUrl, 
+export function CollectionRowActions<TData extends { _id: string, slug?: string }>({
+  row,
+  editUrl,
   viewUrl,
   endpoint,
-  onDelete, 
+  onDelete,
   label = "Item"
 }: CollectionRowActionsProps<TData>) {
   const deleteItem = async (id: string) => {

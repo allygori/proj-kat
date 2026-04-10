@@ -38,7 +38,7 @@ import { CollectionPagination } from "./pagination"
 import { CollectionToolbar } from "./toolbar"
 import { Loader2 } from "lucide-react"
 
-interface CollectionTableProps<TData extends { _id: string }> {
+type CollectionTableProps<TData extends { _id: string }> = {
   table: ReactTable<TData>
   data: TData[]
   setData?: React.Dispatch<React.SetStateAction<TData[]>>
@@ -50,12 +50,12 @@ interface CollectionTableProps<TData extends { _id: string }> {
   onRowClick?: (row: TData) => void
 }
 
-function DraggableRow<TData extends { _id: string }>({ 
-  row, 
-  onRowClick 
-}: { 
+function DraggableRow<TData extends { _id: string }>({
+  row,
+  onRowClick
+}: {
   row: Row<TData>,
-  onRowClick?: (row: TData) => void 
+  onRowClick?: (row: TData) => void
 }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original._id,
@@ -171,9 +171,9 @@ export function CollectionTable<TData extends { _id: string }>({
 
   return (
     <div className="space-y-4">
-      <CollectionToolbar 
-        table={table} 
-        searchFields={searchFields} 
+      <CollectionToolbar
+        table={table}
+        searchFields={searchFields}
         primarySearchField={primarySearchField}
         placeholder={placeholder}
       />
