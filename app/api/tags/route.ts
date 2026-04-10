@@ -7,6 +7,7 @@ import { apiSuccess, apiError, ErrorCodes } from "@/lib/api/response";
 import { validateBody } from "@/lib/api/validator";
 import { parseQueryParams, paginatedQuery } from "@/lib/api/query-builder";
 import { headers } from "next/headers";
+import { slugify } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -48,6 +49,12 @@ export async function POST(request: NextRequest) {
     }
 
     const body = validation.data;
+
+    // Auto-generate slug if it's missing or empty
+    if (!body.slug || body.slug.trim() === "") {
+      body.slug = slugify(body.name);
+    }
+
     const tag = await Tag.create(body);
 
     return apiSuccess(tag, undefined, 201);

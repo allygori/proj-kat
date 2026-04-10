@@ -7,7 +7,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { CategoryType } from "@/components/blog/types"
+import { TagType } from "@/components/blog/types"
 import { CollectionRowActions } from "@/components/dashboard/collection/row-actions"
 
 // Drag handle component for sortable columns
@@ -27,8 +27,8 @@ function DragHandle({ id }: { id: string }) {
   )
 }
 
-export const getCategoryColumns = (isSortable: boolean = false): ColumnDef<CategoryType>[] => {
-  const baseColumns: ColumnDef<CategoryType>[] = [
+export const getTagColumns = (isSortable: boolean = false): ColumnDef<TagType>[] => {
+  const baseColumns: ColumnDef<TagType>[] = [
     {
       id: "select",
       header: ({ table }) => (

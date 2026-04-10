@@ -103,8 +103,8 @@ export const getCategoryColumns = (isSortable: boolean = false): ColumnDef<Categ
     {
       id: "actions",
       cell: ({ row }) => (
-        <CollectionRowActions 
-          row={row} 
+        <CollectionRowActions
+          row={row}
           label="Category"
           endpoint="/api/categories"
           editUrl="/dashboard/categories"

@@ -8,8 +8,10 @@ import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { BlogPostType, CategoryType, UserType } from "@/components/blog/types"
-import { CategoryRowActions } from "../../categories/_components/category-row-actions"
-import { CategoryViewDrawer } from "../../categories/_components/category-view-drawer"
+import { CollectionRowActions } from "@/components/dashboard/collection/row-actions"
+import { ViewDrawer } from "@/components/dashboard/collection/view-drawer"
+// import { CategoryRowActions } from "../../categories/_components/category-row-actions"
+// import { CategoryViewDrawer } from "../../categories/_components/category-view-drawer"
 
 // Drag handle component for sortable columns
 function DragHandle({ id }: { id: string }) {
@@ -61,11 +63,15 @@ export const getPostColumns = (isSortable: boolean = false): ColumnDef<BlogPostT
       accessorKey: "title",
       header: "Article Title",
       cell: ({ row }) => (
-        <CategoryViewDrawer item={row.original}>
+        <ViewDrawer 
+          item={row.original} 
+          editUrl="/dashboard/posts" 
+          viewUrl="/blog"
+        >
           <Button variant="link" className="w-fit px-0 text-left text-foreground font-semibold underline-offset-4 hover:underline">
             {row.original.title}
           </Button>
-        </CategoryViewDrawer>
+        </ViewDrawer>
       ),
       enableHiding: false,
     },
@@ -114,7 +120,12 @@ export const getPostColumns = (isSortable: boolean = false): ColumnDef<BlogPostT
     },
     {
       id: "actions",
-      cell: ({ row }) => <CategoryRowActions row={row} />,
+      cell: ({ row }) => <CollectionRowActions 
+        row={row} 
+        editUrl="/dashboard/posts" 
+        viewUrl="/blog" 
+        label="Article"
+      />,
     },
   ]
 

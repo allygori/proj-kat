@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react'
-import { useStore } from '@tanstack/react-form'
+// import { useStore } from '@tanstack/react-form'`
 import { useFieldContext } from '../form.hook'
 import {
   Field,
@@ -47,6 +47,9 @@ export function InputField({ label, description, ...props }: InputFieldProps) {
       <Input
         id={field.name}
         name={field.name}
+        value={field.state.value}
+        onChange={(e) => field.handleChange(e.target.value)}
+        onBlur={field.handleBlur}
         {...props}
       />
       {

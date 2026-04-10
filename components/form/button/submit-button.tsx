@@ -15,6 +15,7 @@ export const SubmitButton = ({ text, ...props }: SubmitButtonProps) => {
       {
         (isSubmitting) => (
           <Button
+            type="submit"
             size={props.size || "lg"}
             {...props}
             disabled={isSubmitting}

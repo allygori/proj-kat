@@ -6,6 +6,7 @@ import { ZodTagSchema } from "@/lib/validations";
 import { apiSuccess, apiError, ErrorCodes } from "@/lib/api/response";
 import { validateBody } from "@/lib/api/validator";
 import { headers } from "next/headers";
+import { slugify } from "@/lib/utils";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -40,6 +41,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     const validatedData = validation.data;
+
+    // Auto-generate slug if it's empty but name is provided
+    if (validatedData.name && (!validatedData.slug || validatedData.slug.trim() === "")) {
+      validatedData.slug = slugify(validatedData.name);
+    }
+
 
     const tag = await Tag.findOneAndUpdate(
       { _id: id, deleted_at: { $exists: false } },

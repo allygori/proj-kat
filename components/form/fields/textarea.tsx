@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react'
-import { useStore } from '@tanstack/react-form'
+// import { useStore } from '@tanstack/react-form'
 import { useFieldContext } from '../form.hook'
 import {
   Field,
   FieldDescription,
-  FieldError,
+  // FieldError,
   FieldLabel,
 } from "@/components/ui/field"
 import { Textarea } from '@/components/ui/textarea'
@@ -20,7 +20,7 @@ export function TextareaField({ label, description, ...props }: TextareaFieldPro
   const field = useFieldContext<string>()
 
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-  const errors = useStore(field.store, (state) => state.meta.errors)
+  // const errors = useStore(field.store, (state) => state.meta.errors)
 
   return (
     <Field data-invalid={isInvalid}>
@@ -30,6 +30,9 @@ export function TextareaField({ label, description, ...props }: TextareaFieldPro
       <Textarea
         id={field.name}
         name={field.name}
+        value={field.state.value}
+        onChange={(e) => field.handleChange(e.target.value)}
+        onBlur={field.handleBlur}
         {...props}
       />
       {

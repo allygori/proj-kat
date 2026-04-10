@@ -1,4 +1,6 @@
-import { isValidObjectId } from "mongoose";
+// import { isValidObjectId } from "mongoose";
+// import { ObjectId } from "mongoose";
+import { ObjectId } from "bson";
 import { z } from "zod";
 
 export const ZodUserSchema = z.object({
@@ -31,16 +33,16 @@ export const ZodPostSchema = z.object({
   content: z.string().optional(), // HTML content
   content_blocks: z.array(ZodTipTapContentBlockSchema), // TipTap Json data
   featured_image: z.union([
-    z.string().refine((val) => isValidObjectId(val), { message: "Invalid ObjectId" }),
+    z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
     z.undefined(),
   ]),
   category: z.union([
-    z.string().refine((val) => isValidObjectId(val), { message: "Invalid ObjectId" }),
+    z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
     z.undefined(),
   ]),
   tags: z.array(
     z.union([
-      z.string().refine((val) => isValidObjectId(val), { message: "Invalid ObjectId" }),
+      z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
       z.undefined(),
     ])
   ).max(3, "Maximum 3 tags allowed").optional(),
@@ -51,12 +53,12 @@ export const ZodPostSchema = z.object({
     title: z.string().optional(),
     description: z.string().optional(),
     image: z.union([
-      z.string().refine((val) => isValidObjectId(val), { message: "Invalid ObjectId" }),
+      z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
       z.undefined(),
     ])
   }),
   author: z.union([
-    z.string().refine((val) => isValidObjectId(val), { message: "Invalid ObjectId" }),
+    z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
     z.undefined(),
   ]),
   reading_time: z.number().optional(),
@@ -65,7 +67,7 @@ export const ZodPostSchema = z.object({
 
 export const ZodCategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  slug: z.string().min(1, "Slug is required"),
+  slug: z.string(),
   description: z.string().optional(),
   parent: z.string().optional(),
   level: z.number().min(1).max(3).optional(),
@@ -73,7 +75,7 @@ export const ZodCategorySchema = z.object({
 
 export const ZodTagSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  slug: z.string().min(1, "Slug is required"),
+  slug: z.string(),
   description: z.string().optional(),
 });
 

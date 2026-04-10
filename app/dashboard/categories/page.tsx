@@ -2,10 +2,12 @@
 
 import * as React from "react"
 import { CollectionShell } from "@/components/dashboard/collection/shell"
+import { CategoryType } from "@/components/blog/types"
+import { ColumnDef } from "@tanstack/react-table"
 import { getCategoryColumns } from "./_components/category-columns"
 
 export default function CategoryIndexPage() {
-  const columns = React.useMemo(() => getCategoryColumns(true), []) as any
+  const columns = React.useMemo(() => getCategoryColumns(true), []) as ColumnDef<CategoryType>[]
 
   return (
     <CollectionShell

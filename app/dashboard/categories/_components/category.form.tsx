@@ -4,6 +4,9 @@ import { withForm } from "@/components/form/form.hook";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 
+import { ZodCategorySchema } from "@/lib/validations";
+import { z } from "zod";
+
 type FormProps = {
   title?: string;
 };
@@ -14,7 +17,7 @@ const CategoryForm = withForm({
     slug: "",
     description: "",
     parent: "",
-  },
+  } as z.input<typeof ZodCategorySchema>,
   props: {
     title: undefined,
   } as FormProps,
@@ -52,7 +55,7 @@ const CategoryForm = withForm({
                 <form.AppField
                   name="slug"
                   children={(field) => {
-                    return <field.TextField label="Slug" />;
+                    return <field.TextField label="Slug" disabled={true} />;
                   }}
                 />
 

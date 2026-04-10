@@ -7,13 +7,8 @@ import { z } from "zod";
 import { revalidateLogic } from "@tanstack/react-form";
 import { useAppForm } from "@/components/form/form.hook";
 
-const ZodCategorySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  slug: z.string().min(1, "Slug is required"),
-  description: z.string(),
-  parent: z.string(),
-  // level: z.number().min(1).max(3).optional(),
-});
+import { useRouter } from "next/navigation";
+import { ZodCategorySchema } from "@/lib/validations";
 
 const defaultValues: z.input<typeof ZodCategorySchema> = {
   name: "",
@@ -23,35 +18,48 @@ const defaultValues: z.input<typeof ZodCategorySchema> = {
 };
 
 const CreateCategoryPage = () => {
+  const router = useRouter();
   const form = useAppForm({
-    // Supports all useForm options
-    // defaultValues: {
-    //   name: "",
-    //   slug: "",
-    //   description: "",
-    //   // parent: "",
-    //   // level: 0,
-    // },
     defaultValues,
     validationLogic: revalidateLogic(),
     validators: {
       onDynamic: ZodCategorySchema,
     },
-    // validators: {
-    //   onSubmit: CategorySchema,
-    // },
     onSubmit: async ({ value }) => {
-      // Merge form values and React blocks state
-      const payload = { ...value };
+      try {
+        const payload = {
+          ...value,
+          // Convert empty strings to undefined for the API/Mongoose
+          parent: value.parent === "" ? undefined : value.parent,
+          description: value.description === "" ? undefined : value.description,
+        };
 
-      toast("Draft Saved Successfully", {
-        description: (
-          <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-zinc-950 p-4 font-mono text-xs text-zinc-50 border border-zinc-800 dark:bg-zinc-900">
-            <code>{JSON.stringify(payload, null, 2)}</code>
-          </pre>
-        ),
-        position: "bottom-right",
-      });
+        const response = await fetch("/api/categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || result.error?.message || "Terjadi kesalahan saat menyimpan kategori");
+        }
+
+        toast.success("Kategori berhasil dibuat", {
+          description: `Kategori "${value.name}" telah ditambahkan ke sistem.`,
+        });
+
+        router.push("/dashboard/categories");
+        router.refresh();
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Gagal membuat kategori";
+        console.error("Create category error:", error);
+        toast.error(message);
+      }
+
     },
   });
 
@@ -59,7 +67,7 @@ const CreateCategoryPage = () => {
     <div className="@container/main flex flex-1 flex-col gap-2">
       <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
         <div>
-          <h2 className="font-semibold mb-0">Tambah Kategori</h2>
+          <h2 className="font-semibold mb-1">Tambah Kategori</h2>
           <p className="font-normal text-sm">Tambahkan kategori baru yang belum ada sebelumnya.</p>
         </div>
         <CategoryForm form={form} />
