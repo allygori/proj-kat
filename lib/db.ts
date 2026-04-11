@@ -1,7 +1,12 @@
 // Reference: AGENTS.md - Database connection using Mongoose
 import mongoose from 'mongoose';
 
-
+// Import all models to ensure they are registered with Mongoose and prevent "Schema hasn't been registered" errors when populating
+import '@/models/user';
+import '@/models/category';
+import '@/models/tag';
+import '@/models/media';
+import '@/models/blog-post';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
