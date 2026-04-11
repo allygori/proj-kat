@@ -78,7 +78,7 @@ function EditPostFormWrapper({ initialData, id }: { initialData: PostData; id: s
         metaDescription: initialData.metadata?.description || "",
         keywords: "", // Assuming keywords might not exist on metadata yet, fallback to empty string
       },
-      publishedStatus: initialData.published_status || "draft",
+      publishedStatus: initialData.published_status || "published",
       publishedAt: initialData.published_at ? new Date(initialData.published_at).toISOString() : undefined,
       authorId: typeof initialData.author === 'object' && initialData.author ? initialData.author._id : initialData.author || "",
       categoryId: typeof initialData.category === 'object' && initialData.category ? initialData.category._id : initialData.category || "",
