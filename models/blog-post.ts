@@ -11,14 +11,26 @@ const BlogPostSchema = new Schema(
     slug: { type: String, required: true, unique: true },
     nid: { type: String }, // Nano id
     excerpt: { type: String },
-    content: { type: String, required: false }, // HTML content
+    content: { type: String, required: false },      // JSON stringified
+    content_html: { type: String, required: false }, // HTML content
+    // content_blocks: [ // TipTap content blocks JSON
+    //   {
+    //     type: { type: String, required: true }, // e.g., 'paragraph', 'heading', 'image'
+    //     attrs: { type: Schema.Types.Mixed }, // e.g., { src: '...' }
+    //     content: [Schema.Types.Mixed], // Nested inline content
+    //     marks: [Schema.Types.Mixed], // e.g., bold, italic
+    //   }
+    // ],
+    // content_blocks: [ // TipTap content blocks JSON
+    //   {
+    //     type: { type: String, required: true }, // e.g., 'paragraph', 'heading', 'image'
+    //     content: [Schema.Types.Mixed], // Nested inline content
+    //     props: { type: Schema.Types.Mixed }, // e.g., bold, italic
+    //     children: [Schema.Types.Mixed],
+    //   }
+    // ],
     content_blocks: [ // TipTap content blocks JSON
-      {
-        type: { type: String, required: true }, // e.g., 'paragraph', 'heading', 'image'
-        attrs: { type: Schema.Types.Mixed }, // e.g., { src: '...' }
-        content: [Schema.Types.Mixed], // Nested inline content
-        marks: [Schema.Types.Mixed], // e.g., bold, italic
-      }
+      Schema.Types.Mixed
     ],
     featured_image: { type: Schema.Types.ObjectId, ref: Media }, // URL from Media Library
     // categories: [{ type: Schema.Types.ObjectId, ref: Category }], // hierarchical max 3 levels

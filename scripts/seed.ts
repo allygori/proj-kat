@@ -33,45 +33,50 @@ async function seed() {
   await User.deleteMany({});
   await Media.deleteMany({});
 
+  const authorMap = new Map();
+  const categoryMap = new Map();
+  const tagMap = new Map();
+  const mediaMap = new Map();
+
   console.log('Inserting authors...');
   for (const author of authors) {
-    await User.create({
-      _id: author.id,
+    const doc = await User.create({
       name: author.name,
       email: author.email,
       role: 'author',
     });
+    authorMap.set(author.id, doc._id);
   }
 
   console.log('Inserting categories...');
   for (const cat of categories) {
-    await Category.create({
-      _id: cat.id,
+    const doc = await Category.create({
       name: cat.name,
       slug: cat.slug,
       level: 1,
     });
+    categoryMap.set(cat.id, doc._id);
   }
 
   console.log('Inserting tags...');
   for (const tag of tags) {
-    await Tag.create({
-      _id: tag.id,
+    const doc = await Tag.create({
       name: tag.name,
       slug: tag.slug,
     });
+    tagMap.set(tag.id, doc._id);
   }
 
   console.log('Inserting media...');
-  await Media.create({
-    _id: seedMedia.id,
+  const mediaDoc = await Media.create({
     url: seedMedia.url,
     filename: seedMedia.filename,
     original_name: seedMedia.original_name,
     mime_type: seedMedia.mime_type,
     size: seedMedia.size,
-    uploaded_by: authors[0].id,
+    uploaded_by: authorMap.get(authors[0].id),
   });
+  mediaMap.set(seedMedia.id, mediaDoc._id);
 
   console.log('Inserting blog posts...');
   for (const post of mockPosts) {
@@ -80,17 +85,18 @@ async function seed() {
       slug: post.slug,
       nid: post.nid,
       excerpt: post.excerpt,
-      content: post.content,
+      content: "",
+      content_html: post.content,
       content_blocks: post.content_blocks,
-      featured_image: post.featured_image,
-      category: post.category,
-      tags: post.tags,
+      featured_image: mediaMap.get(post.featured_image) || post.featured_image,
+      category: categoryMap.get(post.category) || post.category,
+      tags: Array.isArray(post.tags) ? post.tags.map((tId: any) => tagMap.get(tId) || tId) : post.tags,
       published_status: post.published_status,
       published_at: post.published_at,
-      metadata: post.metadata,
-      author: post.author,
+      metadata: post.metadata ? { ...post.metadata, image: mediaMap.get(post.metadata.image) ?? post.metadata.image } : post.metadata,
+      author: authorMap.get(post.author) || post.author,
       reading_time: post.reading_time,
-      related_posts: post.related_posts,
+      related_posts: Array.isArray(post.related_posts) ? post.related_posts.map((rp: any) => rp) : post.related_posts,
     });
   }
 

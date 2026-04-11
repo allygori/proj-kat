@@ -47,7 +47,7 @@ type PostCardProps = {
 }
 
 export function PostCard({ data, featured = false }: PostCardProps) {
-  const { title, slug, excerpt, published_at, featured_image, author, categories, tags, content_blocks, reading_time, nid } = data;
+  const { title, slug, excerpt, published_at, featured_image, author, tags, content_blocks, reading_time, nid } = data;
 
 
   const publishDate = formatDistanceToNow(new Date(published_at), {

@@ -6,6 +6,7 @@ import { tags } from "./tags";
 import { seedMedia } from "./media";
 // import { nanoid } from "nanoid";
 import { genPostNid } from "@/lib/nano-id";
+import { INITIAL_BLOCK_VALUE } from "@/app/dashboard/posts/_components/post-form.constant";
 
 
 type BlogPost = z.infer<typeof ZodPostSchema>;
@@ -17,14 +18,7 @@ export const mockPosts: BlogPost[] = [
     nid: genPostNid(7),
     excerpt: 'Discover the latest teeth whitening techniques, from professional treatments to at-home solutions. Learn what works and what to avoid.',
     content: '<p>Teeth whitening is one of the most requested cosmetic dental procedures.</p>',
-    content_blocks: [
-      {
-        type: 'paragraph',
-        attrs: {},
-        content: {},
-        marks: {}
-      }
-    ],
+    content_blocks: INITIAL_BLOCK_VALUE,
     featured_image: seedMedia.id,
     category: categories[0].id,
     tags: [tags[0].id, tags[1].id, tags[2].id],
@@ -45,14 +39,7 @@ export const mockPosts: BlogPost[] = [
     nid: genPostNid(7),
     excerpt: 'Deciding between implants and bridges? This detailed comparison explores the pros, cons, costs, and longevity of each option.',
     content: '<p>When you lose a tooth, two of the most popular restorative options are dental implants and bridges.</p>',
-    content_blocks: [
-      {
-        type: 'paragraph',
-        attrs: {},
-        content: {},
-        marks: {}
-      }
-    ],
+    content_blocks: INITIAL_BLOCK_VALUE,
     featured_image: seedMedia.id,
     category: categories[0].id,
     tags: [tags[2].id, tags[3].id],
@@ -73,14 +60,7 @@ export const mockPosts: BlogPost[] = [
     nid: genPostNid(7),
     excerpt: 'We examine the research on electric toothbrushes. Are they worth the investment? Here\'s what dentists recommend.',
     content: '<p>Multiple clinical studies consistently show that electric toothbrushes are slightly more effective.</p>',
-    content_blocks: [
-      {
-        type: 'paragraph',
-        attrs: {},
-        content: {},
-        marks: {}
-      }
-    ],
+    content_blocks: INITIAL_BLOCK_VALUE,
     featured_image: seedMedia.id,
     category: categories[3].id,
     tags: [tags[3].id],

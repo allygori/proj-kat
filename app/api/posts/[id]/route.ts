@@ -103,8 +103,8 @@ export async function PATCH(
     const updates: Partial<z.infer<typeof ZodPostSchema>> = validation.data;
 
     // Recalculate reading time if content changed
-    if (updates.content) {
-      updates.reading_time = calculateReadingTime(updates.content);
+    if (updates.content_html) {
+      updates.reading_time = calculateReadingTime(updates.content_html);
     }
 
     // Handle slug uniqueness if slug changed

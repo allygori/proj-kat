@@ -1,6 +1,7 @@
 // Reference: AGENTS.md § 3.2 - Better-auth configuration with MongoDB
 import { betterAuth } from 'better-auth';
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { admin } from "better-auth/plugins";
 // import mongoose from "mongoose";
 // import { db } from "@/lib/db"
 // const client = await db.getClient();
@@ -36,6 +37,9 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
+  plugins: [
+    admin()
+  ],
   // socialProviders: {
   //   google: {
   //     clientId: process.env.GOOGLE_CLIENT_ID || '',

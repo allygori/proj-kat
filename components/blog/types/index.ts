@@ -1,4 +1,4 @@
-import { ZodPostSchema, ZodCategorySchema, ZodTagSchema, ZodTipTapContentBlockSchema, ZodMediaSchema, ZodUserSchema } from '@/lib/validations';
+import { ZodPostSchema, ZodCategorySchema, ZodTagSchema, ZodMediaSchema, ZodUserSchema } from '@/lib/validations';
 import { infer as zodInfer } from 'zod';
 
 export type CategoryType = zodInfer<typeof ZodCategorySchema> & {

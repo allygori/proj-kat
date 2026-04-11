@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 
 
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   var mongoose: any; // This is necessary for Next.js hot reloading
