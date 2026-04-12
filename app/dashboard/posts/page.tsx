@@ -12,7 +12,7 @@ export default function PostIndexPage() {
   return (
     <CollectionShell
       title="Articles"
-      endpoint="/api/posts"
+      endpoint="/api/posts?sort=-updated_at"
       columns={columns}
       searchFields={["title", "slug", "excerpt"]}
       primarySearchField="title"

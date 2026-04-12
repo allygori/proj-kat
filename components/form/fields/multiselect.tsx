@@ -8,11 +8,14 @@ import {
 } from "@/components/ui/field"
 import {
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
   ComboboxContent,
   ComboboxEmpty,
-  ComboboxInput,
   ComboboxItem,
-  ComboboxList
+  ComboboxList,
+  ComboboxValue
 } from '@/components/ui/combobox'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Spinner } from '@/components/ui/spinner'
@@ -31,23 +34,26 @@ type RemoteDataConfig = {
   limit?: number;
 }
 
-type SelectFieldProps = Omit<ComponentProps<typeof Combobox>, 'value' | 'onValueChange'> & {
+type MultiselectFieldProps = Omit<ComponentProps<typeof Combobox>, 'value' | 'onValueChange' | 'multiple' | 'defaultValue'> & {
   label?: string;
   description?: string;
   placeholder?: string;
   items?: SelectValueType[];
   remote?: RemoteDataConfig;
+  defaultValue?: SelectValueType[];
+  limit?: number;
 };
 
-export function SelectField({
+export function MultiselectField({
   label,
   description,
-  placeholder = "Select an option...",
+  placeholder = "Select options...",
   items: staticItems = [],
+  limit = 3,
   remote,
   ...props
-}: SelectFieldProps) {
-  const field = useFieldContext<string | number | boolean | object | null>()
+}: MultiselectFieldProps) {
+  const field = useFieldContext<any[]>()
   const [searchValue, setSearchValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [fetchedItems, setFetchedItems] = useState<SelectValueType[]>([])
@@ -94,7 +100,7 @@ export function SelectField({
 
       setFetchedItems(mappedItems)
     } catch (error) {
-      console.error("SelectField fetch error:", error)
+      console.error("MultiselectField fetch error:", error)
     } finally {
       setIsLoading(false)
     }
@@ -109,17 +115,33 @@ export function SelectField({
 
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
-  // Map primitive value in form state to object for Combobox
-  const selectedItem = useMemo(() => {
-    return allItems.find(item => item.value === field.state.value) ?? null
-  }, [allItems, field.state.value])
+  // Map primitive values to actual items array, correctly handling incoming DB objects
+  const selectedItems = useMemo(() => {
+    const val = Array.isArray(field.state.value) ? field.state.value : [];
 
-  // Sync search value with selected item's label (crucial for display)
-  useEffect(() => {
-    if (selectedItem && !searchValue) {
-      setSearchValue(selectedItem.label)
-    }
-  }, [selectedItem, searchValue])
+    return val.map((v) => {
+      // Check if `v` is a populated object from the database
+      const isObject = v !== null && typeof v === 'object';
+
+      // Attempt to extract the primitive value using remote keys or standard fallbacks
+      const primitiveValue = isObject
+        ? (v[remote?.valueKey || "_id"] || v.id || v.value)
+        : v;
+
+      // Try finding the item in the fetched/static list
+      const found = allItems.find((item) => item.value === primitiveValue);
+      if (found) return found;
+
+      // If item is not in list but it was an object, dynamically rebuild its label
+      if (isObject) {
+        const extractedLabel = v[remote?.labelKey || "name"] || v.title || v.label || String(primitiveValue);
+        return { label: String(extractedLabel), value: primitiveValue };
+      }
+
+      // Fallback
+      return { label: String(v), value: v };
+    });
+  }, [allItems, field.state.value, remote])
 
   return (
     <Field data-invalid={isInvalid}>
@@ -129,40 +151,58 @@ export function SelectField({
         </FieldLabel>
       )}
       <Combobox
-
         items={allItems}
-        value={selectedItem}
-        onValueChange={(item: unknown) => {
-          const typedItem = item as SelectValueType | null
-          field.handleChange(typedItem?.value ?? null)
-          // Also immediately update search value on selection
-          if (typedItem) {
-            setSearchValue(typedItem.label)
+        multiple
+        value={selectedItems}
+        onValueChange={(newItems: unknown) => {
+          const typedItems = newItems as SelectValueType[] | null
+          if (typedItems) {
+            // Check if limit exceeded before updating value
+            if (typedItems.length > limit) return;
+            field.handleChange(typedItems.map(t => t.value))
+          } else {
+            field.handleChange([])
           }
         }}
         inputValue={searchValue}
         onInputValueChange={setSearchValue}
+        itemToStringValue={(item) => typeof item === 'object' && item !== null ? String((item as SelectValueType).label) : String(item)}
         {...props}
       >
-        <ComboboxInput placeholder={placeholder} />
-        <ComboboxContent >
-          {isLoading && (
-            <div className="flex items-center justify-center py-2">
-              <Spinner className="mr-2 h-4 w-4" />
-              <span className="text-sm text-muted-foreground">Searching...</span>
-            </div>
-          )}
-          {!isLoading && allItems.length === 0 && (
-            <ComboboxEmpty>No items found.</ComboboxEmpty>
-          )}
-          <ComboboxList>
-            {(item: SelectValueType) => (
-              <ComboboxItem key={item.value?.toString() || JSON.stringify(item.value)} value={item}>
+        <ComboboxChips>
+          <ComboboxValue>
+            {selectedItems.map((item, idx) => (
+              // key={item.value?.toString() || JSON.stringify(item.value)}
+              <ComboboxChip key={idx}>
                 {item.label}
-              </ComboboxItem>
+              </ComboboxChip>
+            ))}
+          </ComboboxValue>
+          {selectedItems.length < limit && (
+            <ComboboxChipsInput placeholder={placeholder} />
+          )}
+        </ComboboxChips>
+
+        {selectedItems.length < limit && (
+          <ComboboxContent>
+            {isLoading && (
+              <div className="flex items-center justify-center py-2">
+                <Spinner className="mr-2 h-4 w-4" />
+                <span className="text-sm text-muted-foreground">Searching...</span>
+              </div>
             )}
-          </ComboboxList>
-        </ComboboxContent>
+            {!isLoading && allItems.length === 0 && (
+              <ComboboxEmpty>No items found.</ComboboxEmpty>
+            )}
+            <ComboboxList>
+              {(item: SelectValueType) => (
+                <ComboboxItem key={item.value?.toString() || JSON.stringify(item.value)} value={item}>
+                  {item.label}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        )}
       </Combobox>
       {description && (
         <FieldDescription>

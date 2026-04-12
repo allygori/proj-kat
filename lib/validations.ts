@@ -18,6 +18,31 @@ export const ZodUserSchema = z.object({
 })
 
 
+export const ZodCategorySchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  slug: z.string(),
+  description: z.string().optional(),
+  parent: z.string().optional(),
+  level: z.number().min(1).max(3).optional(),
+});
+
+export const ZodTagSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  slug: z.string(),
+  description: z.string().optional(),
+});
+
+export const ZodMediaSchema = z.object({
+  filename: z.string(),
+  mime_type: z.string(),
+  size: z.number(), // in bytes
+  url: z.string(), // Vercel Blob URL
+  alt_text: z.string(),
+  caption: z.string(),
+  credits: z.string(),
+});
+
+
 // export const ZodTipTapContentBlockSchema = z.object({
 //   // type: z.string().min(1, "Content block type is required"), // e.g., 'paragraph', 'heading', 'image'
 //   // attrs: z.object(), // e.g., { src: '...' }
@@ -39,6 +64,11 @@ export const ZodPostSchema = z.object({
     z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
     z.undefined(),
   ]),
+  // featured_image: ZodMediaSchema.omit({
+  //   alt_text: true,
+  //   caption: true,
+  //   credits: true
+  // }),
   category: z.union([
     z.string().refine((val) => ObjectId.isValid(val), { message: "Invalid ObjectId" }),
     z.undefined(),
@@ -68,29 +98,6 @@ export const ZodPostSchema = z.object({
   related_posts: z.array(z.string()).optional(),
 });
 
-export const ZodCategorySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  slug: z.string(),
-  description: z.string().optional(),
-  parent: z.string().optional(),
-  level: z.number().min(1).max(3).optional(),
-});
-
-export const ZodTagSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  slug: z.string(),
-  description: z.string().optional(),
-});
-
-export const ZodMediaSchema = z.object({
-  filename: z.string(),
-  mime_type: z.string(),
-  size: z.number(), // in bytes
-  url: z.string(), // Vercel Blob URL
-  alt_text: z.string(),
-  caption: z.string(),
-  credits: z.string(),
-});
 
 // export const ZodUserSchema = z.object({
 //   email: z.string(),

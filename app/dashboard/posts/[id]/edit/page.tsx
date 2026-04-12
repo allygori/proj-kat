@@ -1,13 +1,14 @@
 "use client";
 
 import { use, useEffect, useState, useMemo } from "react";
-import PostForm, { formSchema } from "../../_components/post-form";
+import PostForm from "../../_components/post-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/form/form.hook";
 import { useRouter } from "next/navigation";
 import { INITIAL_BLOCK_VALUE } from "../../_components/post-form.constant";
 import { TagType } from "@/components/blog/types";
+import { formSchema } from "../../_components/post-form.schema";
 
 type PostData = any; // You can use ZodPostSchema to infer this if preferred
 
@@ -63,6 +64,7 @@ function EditPostFormWrapper({ initialData, id }: { initialData: PostData; id: s
 
   const formValues = useMemo(() => {
     return {
+      id: initialData._id || initialData.id || "",
       title: initialData.title || "",
       slug: initialData.slug || "",
       excerpt: initialData.excerpt || "",
@@ -83,7 +85,7 @@ function EditPostFormWrapper({ initialData, id }: { initialData: PostData; id: s
       authorId: typeof initialData.author === 'object' && initialData.author ? initialData.author._id : initialData.author || "",
       categoryId: typeof initialData.category === 'object' && initialData.category ? initialData.category._id : initialData.category || "",
       tags: initialData.tags || [],
-      featuredImage: typeof initialData.featured_image === 'object' && initialData.featured_image ? initialData.featured_image._id : initialData.featured_image || "",
+      featuredImage: initialData.featured_image || "",
     };
   }, [initialData]);
 
@@ -104,8 +106,8 @@ function EditPostFormWrapper({ initialData, id }: { initialData: PostData; id: s
           content_blocks: value.body?.content_blocks,
           category: value.categoryId === "" ? undefined : value.categoryId,
           author: value.authorId === "" ? undefined : value.authorId,
-          featured_image: value.featuredImage === "" ? undefined : value.featuredImage,
-          published_status: value.publishedStatus || "draft",
+          featured_image: value.featuredImage === "" ? undefined : value.featuredImage?._id,
+          published_status: value.publishedStatus || "published",
           published_at: value.publishedAt ? new Date(value.publishedAt).toISOString() : undefined,
           metadata: {
             title: value.seo?.metaTitle || "",

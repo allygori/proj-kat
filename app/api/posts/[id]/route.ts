@@ -14,7 +14,7 @@ import { isValidObjectId } from "mongoose";
 // Derived schema for updating posts (partial)
 const ZodUpdatePostSchema = ZodPostSchema.omit({
   nid: true,
-  author: true,
+  // author: true,
   reading_time: true
 }).partial();
 

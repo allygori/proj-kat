@@ -1,50 +1,27 @@
 "use client"
 
 import { z } from "zod"
+import Image from "next/image"
 import { withForm } from "@/components/form/form.hook"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FieldGroup } from "@/components/ui/field"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-// import { InputGroup, InputGroupAddon, InputGroupText } from "@/components/ui/input-group"
 import { MediaPickerModal } from "@/app/dashboard/media/_components/media-picker-modal"
 import { Button } from "@/components/ui/button"
 import { ImagePlus, X } from "lucide-react"
 import { INITIAL_BLOCK_VALUE } from "./post-form.constant"
+import { formSchema } from "./post-form.schema"
+import { MediaType } from "@/components/blog/types"
 
-// Ensure Zod handles the complex content object
-const BlockContentSchema = z.object({
-  content: z.string().optional(),
-  content_html: z.string().optional(),
-  content_blocks: z.any().optional(),
-});
-
-export const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  slug: z.string().min(1, "Slug is required"),
-  excerpt: z.string().optional(),
-  body: BlockContentSchema.optional(), // we will bind the TextEditor to this field
-  seo: z.object({
-    metaTitle: z.string().optional(),
-    metaDescription: z.string().optional(),
-    keywords: z.string().optional(),
-  }).optional(),
-  publishedStatus: z.string().optional(),
-  publishedAt: z.string().optional(),
-  authorId: z.string().optional(),
-  categoryId: z.string().optional(),
-  tags: z.array(z.any()).max(3, "Max 3 tags allowed").optional(),
-  featuredImage: z.string().optional(),
-});
 
 type FormProps = {
   title?: string;
 };
 
 
-
-
 const PostForm = withForm({
   defaultValues: {
+    id: "",
     title: "",
     slug: "",
     excerpt: "",
@@ -142,13 +119,28 @@ const PostForm = withForm({
             <TabsContent value="metadata" className="flex flex-col gap-6">
               <Card className="border-border/50 shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-lg">Metadata Setup</CardTitle>
+                  <CardTitle className="text-lg">Metadata</CardTitle>
                   <CardDescription>
                     Configure classification and authorship.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <FieldGroup className="flex flex-col gap-6">
+                    <form.AppField
+                      name="slug"
+                      children={(field) => {
+                        return (
+                          <field.TextField
+                            label="URL Slug"
+                            disabled={true}
+                          // InputProps={{
+                          //   // Assuming support for Shadcn input groups via a wrapper, otherwise TextField directly handles it
+                          // }}
+                          />
+                        );
+                      }}
+                    />
+
                     <form.AppField
                       name="categoryId"
                       children={(field) => (
@@ -166,20 +158,39 @@ const PostForm = withForm({
                       )}
                     />
 
-                    {/* Tags is essentially multiple SelectField, adjust to SelectField or input for now. */}
-                    {/* Assuming multi-select if available, otherwise just text/tags */}
                     <form.AppField
                       name="tags"
                       children={(field) => (
                         // Using Textfield for now until proper Tags multi-select is available
-                        <field.TextField label="Tags (Comma separated ids for now)" />
+                        <field.MultiselectField
+                          label="Tags"
+                          description="Max tags: 3"
+                          remote={{
+                            url: "/api/tags",
+                            resultsKey: "data",
+                            labelKey: "name",    // Field to use as label
+                            valueKey: "_id",     // Field to use as value
+                            searchParam: "q",    // Query param for searching
+                            limit: 5
+                          }}
+                        />
                       )}
                     />
 
                     <form.AppField
                       name="authorId"
                       children={(field) => (
-                        <field.TextField label="Author ID" />
+                        <field.SelectField
+                          label="Author"
+                          remote={{
+                            url: "/api/users",
+                            resultsKey: "data",
+                            labelKey: "name",    // Field to use as label
+                            valueKey: "_id",     // Field to use as value
+                            searchParam: "q",    // Query param for searching
+                            limit: 5
+                          }}
+                        />
                       )}
                     />
                   </FieldGroup>
@@ -233,20 +244,6 @@ const PostForm = withForm({
           <FieldGroup className="flex flex-col gap-6">
 
             <form.AppField
-              name="slug"
-              children={(field) => {
-                return (
-                  <field.TextField
-                    label="URL Slug"
-                  // InputProps={{
-                  //   // Assuming support for Shadcn input groups via a wrapper, otherwise TextField directly handles it
-                  // }}
-                  />
-                );
-              }}
-            />
-
-            <form.AppField
               name="publishedAt"
               children={(field) => (
                 <field.DateTimeField label="Publish Date" />
@@ -259,33 +256,43 @@ const PostForm = withForm({
               children={(field) => (
                 <div className="flex flex-col gap-2">
                   <span className="text-sm font-medium">Featured Image</span>
-                  {field.state.value ? (
-                    <div className="relative aspect-video rounded-xl overflow-hidden border border-border bg-muted">
-                      {/* Preview placeholder since we only store ID, in real case we would fetch the image URL or store url in field as well */}
-                      <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
-                        {field.state.value}
-                      </div>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-2 right-2 h-6 w-6 rounded-full"
-                        onClick={() => field.handleChange("")}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <MediaPickerModal
-                      onSelect={(asset) => field.handleChange(asset._id)}
-                      trigger={
-                        <Button type="button" variant="outline" className="w-full border-dashed h-24 text-muted-foreground flex flex-col gap-1 rounded-xl">
-                          <ImagePlus className="h-5 w-5" />
-                          <span className="text-xs">Browse Media</span>
+                  {field.state.value ?
+                    field.state.value.url ? (
+                      <div className="relative aspect-video rounded-xl overflow-hidden border border-border bg-muted">
+                        {/* Preview placeholder since we only store ID, in real case we would fetch the image URL or store url in field as well */}
+                        <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
+                          <Image
+                            src={(field.state.value as unknown as MediaType)?.url || ""}
+                            alt={(field.state.value as unknown as MediaType)?.alt_text || "Featured Image"}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        </div>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                          onClick={() => field.handleChange("")}
+                        >
+                          <X className="h-3 w-3" />
                         </Button>
-                      }
-                    />
-                  )}
+                      </div>
+                    ) : (
+                      <div>Failed to load image</div>
+                    )
+                    : (
+                      <MediaPickerModal
+                        onSelect={(asset) => field.handleChange(asset)}
+                        trigger={
+                          <Button type="button" variant="outline" className="w-full border-dashed h-24 text-muted-foreground flex flex-col gap-1 rounded-xl">
+                            <ImagePlus className="h-5 w-5" />
+                            <span className="text-xs">Browse Media</span>
+                          </Button>
+                        }
+                      />
+                    )}
                 </div>
               )}
             />

@@ -5,6 +5,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 import { useIsMobile } from "@/hooks/use-mobile"
 import { BlogPostType, MediaType, UserType } from "@/components/blog/types"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 
 
@@ -19,7 +20,7 @@ export const ItemDetailDrawer = ({ item }: { item: BlogPostType }) => {
           {item.title}
         </Button>
       </DrawerTrigger>
-      <DrawerContent className={isMobile ? "" : "sm:max-w-md"}>
+      <DrawerContent className={cn(isMobile ? "" : "sm:max-w-md")}>
         <DrawerHeader className="gap-1">
           <DrawerTitle className="leading-tight text-xl">{item.title}</DrawerTitle>
           <DrawerDescription>

@@ -1,17 +1,18 @@
 "use client";
 
-import PostForm, { formSchema } from "@/app/dashboard/posts/_components/post-form";
-
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 import { revalidateLogic } from "@tanstack/react-form";
-import { useAppForm } from "@/components/form/form.hook";
 
-import { useRouter } from "next/navigation";
-import { INITIAL_BLOCK_VALUE } from "../_components/post-form.constant";
+import { useAppForm } from "@/components/form/form.hook";
+import PostForm from "@/app/dashboard/posts/_components/post-form";
 import { TagType } from "@/components/blog/types";
+import { INITIAL_BLOCK_VALUE } from "../_components/post-form.constant";
+import { formSchema } from "../_components/post-form.schema";
 
 const defaultValues: z.input<typeof formSchema> = {
+  id: "",
   title: "",
   slug: "",
   excerpt: "",
@@ -53,7 +54,7 @@ const CreatePage = () => {
           content_blocks: value.body?.content_blocks,
           category: value.categoryId === "" ? undefined : value.categoryId,
           featured_image: value.featuredImage === "" ? undefined : value.featuredImage,
-          published_status: value.publishedStatus || "draft",
+          published_status: value.publishedStatus || "published",
           published_at: value.publishedAt ? new Date(value.publishedAt).toISOString() : undefined,
           metadata: {
             title: value.seo?.metaTitle || "",
