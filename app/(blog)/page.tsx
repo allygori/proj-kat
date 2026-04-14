@@ -4,8 +4,8 @@
 import { db } from '@/lib/db';
 import BlogPost from '@/models/blog-post';
 import { BlogIndexClient } from '@/components/blog/blog-index';
-import { BlogHeader } from '@/components/blog/blog-header';
-import { BlogFooter } from '@/components/blog/blog-footer';
+// import { BlogHeader } from '@/components/blog/blog-header';
+// import { BlogFooter } from '@/components/blog/blog-footer';
 
 export const metadata = {
   title: 'Katalis — Jurnal & Catatan Klinis Dokter Gigi',
@@ -27,13 +27,17 @@ export default async function HomePage() {
 
   const data = JSON.parse(JSON.stringify(posts ?? []));
 
+  // return (
+  //   <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
+  //     {/* <BlogHeader /> */}
+  //     {/* <main className="flex-1"> */}
+  //     <BlogIndexClient posts={data} caseStudySlug="studi-kasus" />
+  //     {/* </main> */}
+  //     {/* <BlogFooter /> */}
+  //   </div>
+  // );
+
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
-      <BlogHeader />
-      <main className="flex-1">
-        <BlogIndexClient posts={data} caseStudySlug="studi-kasus" />
-      </main>
-      <BlogFooter />
-    </div>
-  );
+    <BlogIndexClient posts={data} caseStudySlug="studi-kasus" />
+  )
 }
