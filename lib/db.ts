@@ -1,4 +1,9 @@
 // Reference: AGENTS.md - Database connection using Mongoose
+
+// import dns from 'node:dns';
+// dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+
 import mongoose from 'mongoose';
 
 // Import all models to ensure they are registered with Mongoose and prevent "Schema hasn't been registered" errors when populating
