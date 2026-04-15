@@ -8,7 +8,16 @@ export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Check if user is authenticated via better-auth session
-  const sessionToken = request.cookies.get('better-auth.session_token')?.value;
+  // const sessionToken = request.cookies.get('better-auth.session_token')?.value;
+
+  const sessionToken =
+    request.cookies.get("better-auth.session_token") ??
+    request.cookies.get("_Secure-better-auth.session_token") ??
+    request.cookies.get("__Secure-better-auth.session_token") ??
+    request.cookies.getAll().find((c) =>
+      c.name.endsWith("better-auth.session_token")
+    );
+
 
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
   const isAuthPath = authPaths.some((path) => pathname.startsWith(path));
