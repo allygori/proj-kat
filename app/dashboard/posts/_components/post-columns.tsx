@@ -66,7 +66,7 @@ export const getPostColumns = (isSortable: boolean = false): ColumnDef<BlogPostT
         <ViewDrawer 
           item={row.original} 
           editUrl="/dashboard/posts" 
-          viewUrl="/blog"
+          viewUrl="/posts"
         >
           <Button variant="link" className="w-fit px-0 text-left text-foreground font-semibold underline-offset-4 hover:underline">
             {row.original.title}
@@ -123,7 +123,7 @@ export const getPostColumns = (isSortable: boolean = false): ColumnDef<BlogPostT
       cell: ({ row }) => <CollectionRowActions 
         row={row} 
         editUrl="/dashboard/posts" 
-        viewUrl="/blog" 
+        viewUrl="/posts" 
         label="Article"
       />,
     },

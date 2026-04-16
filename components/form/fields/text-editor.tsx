@@ -48,28 +48,36 @@ export const TextEditorField = ({ label, description }: TextEditorFieldProps) =>
   //   ? initialContent as PartialBlock[]
   //   : INITIAL_BLOCK_VALUE as PartialBlock[]
 
-  // const editor = useCreateBlockNote({
-  //   initialContent: validInitialContent,
-  // });
-
-
-
-
-
-  const editor = useMemo(() => {
-    // if (initialContent === "loading") {
-    //   return undefined;
-    // }
-
-    const validInitialContent = Array.isArray(initialContent) && initialContent.length > 0 && initialContent[0].type
+  const validInitialContent = Array.isArray(initialContent) && initialContent.length > 0 && initialContent[0].type
       ? initialContent as PartialBlock[]
       : INITIAL_BLOCK_VALUE as PartialBlock[]
 
-    return BlockNoteEditor.create({ initialContent: validInitialContent });
-  }, [initialContent]);
+  const editor = useCreateBlockNote({
+    initialContent: validInitialContent,
+  });
 
-  // Sets the initial document JSON
-  // useEffect(() => setBlocks(editor.document), []);
+
+
+
+
+  // const editor = useMemo(() => {
+  //   // if (initialContent === "loading") {
+  //   //   return undefined;
+  //   // }
+
+  //   const validInitialContent = Array.isArray(initialContent) && initialContent.length > 0 && initialContent[0].type
+  //     ? initialContent as PartialBlock[]
+  //     : INITIAL_BLOCK_VALUE as PartialBlock[]
+
+  //   return BlockNoteEditor.create({ initialContent: validInitialContent });
+
+  //   // return useCreateBlockNote({
+  //   //   initialContent: validInitialContent
+  //   // })
+  // }, [initialContent]);
+
+  // // // Sets the initial document JSON
+  // // // useEffect(() => setBlocks(editor.document), []);
 
   const handleChange = async () => {
     // Generate both HTML and JSON formats

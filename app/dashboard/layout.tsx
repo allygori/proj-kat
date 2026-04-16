@@ -38,10 +38,10 @@ export default async function DashboardLayout({
             </SidebarInset>
           </SidebarProvider>
         </TooltipProvider>
-      </ActiveThemeProvider>
 
-      {/* toaster */}
-      <Toaster />
+        {/* toaster */}
+        <Toaster />
+      </ActiveThemeProvider>
     </>
   )
 }

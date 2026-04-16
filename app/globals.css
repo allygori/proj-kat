@@ -190,3 +190,9 @@ html {
     @apply font-sans;
   }
 }
+
+@layer base {
+  .bn-shadcn * {
+    @apply border-border outline-ring/50;
+  }
+}
