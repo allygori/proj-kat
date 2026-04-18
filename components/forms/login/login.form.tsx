@@ -10,9 +10,6 @@ import { type ZodLoginInput } from "./login.schema";
 
 type FormProps = {
   error?: string | null;
-  isMagicLink?: boolean;
-  onResetMagicLink?: () => void;
-  onMagicLink?: () => void;
 };
 
 const LoginForm = withForm({
@@ -22,30 +19,8 @@ const LoginForm = withForm({
   } as ZodLoginInput,
   props: {
     error: null,
-    isMagicLink: false,
-    onResetMagicLink: () => { },
-    onMagicLink: () => { },
   } as FormProps,
-  render: function Render({ form, error, isMagicLink, onResetMagicLink, onMagicLink }) {
-    if (isMagicLink) {
-      return (
-        <div className="space-y-4">
-          <Alert className="bg-emerald-50 border-emerald-200">
-            <p className="text-emerald-800">
-              Check your email for a magic link to sign in. The link expires in 1 hour.
-            </p>
-          </Alert>
-          <Button
-            variant="outline"
-            onClick={onResetMagicLink}
-            className="w-full text-slate-700 hover:bg-slate-50"
-          >
-            Back to login
-          </Button>
-        </div>
-      );
-    }
-
+  render: function Render({ form, error }) {
     return (
       <form
         id="login-form"
@@ -82,30 +57,6 @@ const LoginForm = withForm({
           <form.AppForm>
             <form.SubmitButton text="Sign In" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" />
           </form.AppForm>
-
-          <div className="relative my-2">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-200">Or continue with</span>
-            </div>
-          </div>
-
-          <form.Subscribe selector={(state) => [state.isSubmitting, state.values.email] as const}>
-            {([isSubmitting, email]) => (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onMagicLink}
-                disabled={isSubmitting || !email}
-                className="w-full text-slate-700 bg-white border-slate-200 hover:bg-slate-50"
-              >
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Magic Link
-              </Button>
-            )}
-          </form.Subscribe>
         </div>
       </form>
     );

@@ -13,7 +13,6 @@ import { z } from "zod";
 export default function Login2Page() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [isMagicLink, setIsMagicLink] = useState(false);
 
   const form = useAppForm({
     defaultValues: {
@@ -46,31 +45,6 @@ export default function Login2Page() {
     },
   });
 
-  const handleMagicLink = async () => {
-    const email = form.getFieldValue("email");
-    if (!email) {
-      setError("Please enter your email first to use magic link sign-in.");
-      return;
-    }
-
-    setError(null);
-    try {
-      const response = await fetch('/api/auth/sign-in/magic-link', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send magic link');
-      }
-
-      setIsMagicLink(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send magic link');
-    }
-  };
-
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -96,9 +70,6 @@ export default function Login2Page() {
             <LoginForm
               form={form}
               error={error}
-              isMagicLink={isMagicLink}
-              onResetMagicLink={() => setIsMagicLink(false)}
-              onMagicLink={handleMagicLink}
             />
 
             <div className="mt-8 flex items-center justify-between text-sm">
