@@ -1,11 +1,8 @@
 "use client"
 
 import {
-  CreditCard,
   MoreVertical,
   LogOut,
-  Bell,
-  UserCircle,
 } from "lucide-react"
 
 import {
@@ -29,16 +26,36 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+
+type UserType = {
+  name: string;
+  email: string;
+  image?: string | null;
+}
+
+type NavUserProps = {
+  user?: UserType
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
+
+  const { name = "", email = "", image = null } = user ?? {};
+
+
+  const getAvatarInitials = (name: string): string => {
+    if (!name) return "";
+    const words = name.trim().split(/\s+/);
+
+    if (words.length === 0) return "";
+    // Take first letter of first word + first letter of second word if exists
+    const initials = words.length > 1
+      ? words[0].charAt(0) + words[1].charAt(0)
+      : words[0].charAt(0);
+
+    return initials.toUpperCase();
+  };
+
 
   return (
     <SidebarMenu>
@@ -53,13 +70,13 @@ export function NavUser({
             }
           >
             <Avatar className="h-8 w-8 rounded-lg grayscale">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              {image && <AvatarImage src={image} alt={name} />}
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate font-medium">{name}</span>
               <span className="truncate text-xs text-muted-foreground">
-                {user.email}
+                {email}
               </span>
             </div>
             <MoreVertical className="ml-auto size-4" />
@@ -75,19 +92,19 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    {image && <AvatarImage src={image} alt={name} />}
+                    <AvatarFallback className="rounded-lg">{getAvatarInitials(name)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
+                    <span className="truncate font-medium">{name}</span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user.email}
+                      {email}
                     </span>
                   </div>
                 </div>
               </DropdownMenuLabel>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircle />
@@ -101,7 +118,7 @@ export function NavUser({
                 <Bell />
                 Notifications
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />

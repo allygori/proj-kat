@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import dbConnect from "@/lib/db";
 import Media from "@/models/media";
@@ -10,7 +10,7 @@ import { parseQueryParams, paginatedQuery } from "@/lib/api/query-builder";
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    
+
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
       return apiError(ErrorCodes.UNAUTHORIZED, "Anda harus login untuk mengakses galeri media", 401);
@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
 
     // Upload to Vercel Blob
     const filename = folder ? `${folder}/${file.name}` : file.name;
-    
-    const blob = await put(filename, file, { 
+
+    const blob = await put(filename, file, {
       access: "public",
       addRandomSuffix: true
     });
@@ -101,7 +101,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     await dbConnect();
-    
+
     const media = await Media.findById(id);
     if (!media) {
       return apiError(ErrorCodes.NOT_FOUND, "Media tidak ditemukan", 404);
@@ -115,7 +115,7 @@ export async function DELETE(request: NextRequest) {
     // Soft delete in database
     media.deleted_at = new Date();
     await media.save();
-    
+
     return apiSuccess({ success: true, message: "Media berhasil dihapus" });
   } catch (error) {
     console.error("DELETE /api/media error:", error);

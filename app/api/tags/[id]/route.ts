@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import dbConnect from "@/lib/db";
 import Tag from "@/models/tag";
 import { ZodTagSchema } from "@/lib/validations";

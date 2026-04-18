@@ -1,7 +1,7 @@
 // Reference: AGENTS.md § 3.4 - Blog Post Detail API (GET, PATCH, DELETE)
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import dbConnect from "@/lib/db";
 import BlogPost from "@/models/blog-post";
 import { ZodPostSchema } from "@/lib/validations";

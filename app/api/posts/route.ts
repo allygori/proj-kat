@@ -1,6 +1,6 @@
 // Reference: AGENTS.md § 3.4 - Blog Post API with filtering, sorting, and pagination
 import { type NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import dbConnect from "@/lib/db";
 import BlogPost from "@/models/blog-post";
 import { ZodPostSchema } from "@/lib/validations";

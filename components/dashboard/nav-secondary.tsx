@@ -38,9 +38,9 @@ export function NavSecondary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton render={<a href={item.url} />}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
+                <item.icon />
+                <span>{item.title}</span>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
           <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">

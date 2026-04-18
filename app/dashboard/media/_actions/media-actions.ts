@@ -4,7 +4,7 @@
 import { put, del } from '@vercel/blob';
 import { db } from '@/lib/db';
 import Media from '@/models/media';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/auth';
 import { headers } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
@@ -29,9 +29,9 @@ export async function uploadMediaAction(formData: FormData) {
   if (!file) throw new Error('No file provided');
 
   // 1. Upload to Vercel Blob
-  const blob = await put(file.name, file, { 
+  const blob = await put(file.name, file, {
     access: 'public',
-    addRandomSuffix: true 
+    addRandomSuffix: true
   });
 
   // 2. Save to Database
@@ -54,9 +54,9 @@ export async function uploadMediaAction(formData: FormData) {
  */
 export async function getMediaAssetsAction(query: { skip?: number; limit?: number; folder?: string } = {}) {
   await db.connect();
-  
+
   const { skip = 0, limit = 50, folder } = query;
-  
+
   const filter: any = { deleted_at: null };
   if (folder) filter.folder = folder;
 
