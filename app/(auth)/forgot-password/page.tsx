@@ -1,32 +1,25 @@
-// Reference: AGENTS.md § 3.2 - Password reset page
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from '@tanstack/react-form';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
-import z from 'zod';
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useAppForm } from "@/components/form/form.hook";
+import { revalidateLogic } from "@tanstack/react-form";
+import ForgotPasswordForm, { ZodForgotPasswordSchema, type ZodForgotPasswordInput } from "@/components/forms/forgot-password";
+import { GalleryVerticalEnd } from "lucide-react";
 
-const resetSchema = z.object({
-  email: z.string().email('Invalid email address'),
-});
 
-// type ResetFormData = z.infer<typeof resetSchema>;
-
-export default function ForgotPasswordPage() {
+export default function ForgotPassword2Page() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
-      email: '',
-    },
+      email: "",
+    } as ZodForgotPasswordInput,
+    validationLogic: revalidateLogic(),
     validators: {
-      onSubmit: resetSchema,
+      onDynamic: ZodForgotPasswordSchema,
     },
     onSubmit: async ({ value }) => {
       setError(null);
@@ -49,70 +42,52 @@ export default function ForgotPasswordPage() {
     },
   });
 
-  if (success) {
-    return (
-      <div className="space-y-4">
-        <Alert className="bg-green-50 border-green-200">
-          <p className="text-green-800">
-            Check your email for password reset instructions. The link expires in 1 hour.
-          </p>
-        </Alert>
-        <Button variant="outline" className="w-full" render={<Link href="/login" />}>
-          Back to login
-        </Button>
-      </div>
-    );
-  }
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-      className="space-y-4"
-    >
-      {error && (
-        <Alert className="bg-red-50 border-red-200">
-          <p className="text-red-800 text-sm">{error}</p>
-        </Alert>
-      )}
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <a href="#" className="flex items-center gap-2 font-medium">
+            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <GalleryVerticalEnd className="size-4" />
+            </div>
+            Katalis Dental.
+          </a>
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <div className="mb-6 text-center">
+              <div className="mb-6 text-center">
+                <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-foreground">
+                  Reset password
+                </h2>
+              </div>
+            </div>
 
-      <p className="text-slate-600 text-sm">
-        Enter your email address and we&apos;ll send you instructions to reset your password.
-      </p>
+            <ForgotPasswordForm form={form} error={error} success={success} />
 
-      <form.Field
-        name="email"
-        children={(field) => (
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="your@clinic.com"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              aria-invalid={!!field.state.meta.errors.length}
-            />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-500">{field.state.meta.errors[0]?.message}</p>
+            {!success && (
+              <div className="mt-8 text-center text-sm">
+                <Link
+                  href="/login"
+                  className="text-slate-500 hover:text-slate-900 dark:hover:text-accent-foreground font-medium transition-colors"
+                >
+                  Back to login
+                </Link>
+              </div>
             )}
           </div>
-        )}
-      />
-
-      <Button type="submit" disabled={form.state.isSubmitting} className="w-full">
-        {form.state.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Send Reset Link
-      </Button>
-
-      <div className="text-sm text-center">
-        <Link href="/login" className="text-indigo-600 hover:underline">
-          Back to login
-        </Link>
+        </div>
       </div>
-    </form>
-  );
+      <div className="relative hidden bg-muted lg:block">
+        <Image
+          src="https://images.unsplash.com/photo-1612736777093-461fb48101d7?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.1.0"
+          alt="Image"
+          width={1024}
+          height={1536}
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5] dark:grayscale"
+        />
+      </div>
+    </div>
+  )
 }

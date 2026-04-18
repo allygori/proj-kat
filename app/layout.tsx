@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <body className={`${plusJakarta.variable} font-sans antialiased`}>
-        <ThemeProvider nonce="1111" scriptProps={scriptProps} attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider scriptProps={scriptProps} attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
       </body>

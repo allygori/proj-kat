@@ -1,36 +1,28 @@
-// Reference: AGENTS.md § 3.2 - Login page with email/password + magic link
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from '@tanstack/react-form';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
-import z from 'zod';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { revalidateLogic } from "@tanstack/react-form";
+import { GalleryVerticalEnd } from "lucide-react"
+import { useAppForm } from "@/components/form/form.hook";
+import LoginForm, { ZodLoginSchema } from "@/components/forms/login";
+import { z } from "zod";
 
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
-// type LoginFormData = z.infer<typeof loginSchema>;
-
-export default function LoginPage() {
+export default function Login2Page() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isMagicLink, setIsMagicLink] = useState(false);
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
-      email: '',
-      password: '',
-    },
+      email: "",
+      password: "",
+    } as z.input<typeof ZodLoginSchema>,
+    validationLogic: revalidateLogic(),
     validators: {
-      onSubmit: loginSchema,
+      onDynamic: ZodLoginSchema,
     },
     onSubmit: async ({ value }) => {
       setError(null);
@@ -47,6 +39,7 @@ export default function LoginPage() {
         }
 
         router.push('/dashboard');
+        router.refresh();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       }
@@ -54,9 +47,9 @@ export default function LoginPage() {
   });
 
   const handleMagicLink = async () => {
-    const state = form.getFieldValue('email');
-    if (!state) {
-      setError('Please enter your email first');
+    const email = form.getFieldValue("email");
+    if (!email) {
+      setError("Please enter your email first to use magic link sign-in.");
       return;
     }
 
@@ -65,7 +58,7 @@ export default function LoginPage() {
       const response = await fetch('/api/auth/sign-in/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: state }),
+        body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
@@ -78,114 +71,62 @@ export default function LoginPage() {
     }
   };
 
-  if (isMagicLink) {
-    return (
-      <div className="space-y-4">
-        <Alert className="bg-green-50 border-green-200">
-          <p className="text-green-800">
-            Check your email for a magic link to sign in. The link expires in 1 hour.
-          </p>
-        </Alert>
-        <Button
-          variant="outline"
-          onClick={() => setIsMagicLink(false)}
-          className="w-full"
-        >
-          Back to login
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-      className="space-y-4"
-    >
-      {error && (
-        <Alert className="bg-red-50 border-red-200">
-          <p className="text-red-800 text-sm">{error}</p>
-        </Alert>
-      )}
-
-      <form.Field
-        name="email"
-        children={(field) => (
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="your@clinic.com"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              aria-invalid={!!field.state.meta.errors.length}
-            />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-500">{field.state.meta.errors[0]?.message}</p>
-            )}
-          </div>
-        )}
-      />
-
-      <form.Field
-        name="password"
-        children={(field) => (
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-              onBlur={field.handleBlur}
-              aria-invalid={!!field.state.meta.errors.length}
-            />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-500">{field.state.meta.errors[0]?.message}</p>
-            )}
-          </div>
-        )}
-      />
-
-      <Button type="submit" disabled={form.state.isSubmitting} className="w-full">
-        {form.state.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Sign In
-      </Button>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-300" />
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <a href="#" className="flex items-center gap-2 font-medium">
+            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <GalleryVerticalEnd className="size-4" />
+            </div>
+            Katalis Dental.
+          </a>
         </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-slate-600">Or continue with</span>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-foreground">
+                Welcome back
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Enter your credentials to access your account
+              </p>
+            </div>
+
+            <LoginForm
+              form={form}
+              error={error}
+              isMagicLink={isMagicLink}
+              onResetMagicLink={() => setIsMagicLink(false)}
+              onMagicLink={handleMagicLink}
+            />
+
+            <div className="mt-8 flex items-center justify-between text-sm">
+              <Link
+                href="/signup"
+                className="text-primary hover:text-primary/80 font-medium transition-colors"
+              >
+                Create account
+              </Link>
+              <Link
+                href="/forgot-password"
+                className="text-slate-500 hover:text-slate-900 dark:hover:text-accent-foreground font-medium transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
-
-      <Button
-        type="button"
-        variant="outline"
-        onClick={handleMagicLink}
-        disabled={form.state.isSubmitting || !form.getFieldValue('email')}
-        className="w-full"
-      >
-        {form.state.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Magic Link
-      </Button>
-
-      <div className="flex items-center justify-between text-sm">
-        <Link href="/signup" className="text-indigo-600 hover:underline">
-          Create account
-        </Link>
-        <Link href="/forgot-password" className="text-indigo-600 hover:underline">
-          Forgot password?
-        </Link>
+      <div className="relative hidden bg-muted lg:block">
+        <Image
+          src="https://images.unsplash.com/photo-1612736777093-461fb48101d7?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.1.0"
+          alt="Image"
+          width={1024}
+          height={1536}
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.6] dark:grayscale"
+        />
       </div>
-    </form>
-  );
+    </div>
+  )
 }
