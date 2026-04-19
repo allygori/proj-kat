@@ -5,6 +5,7 @@ import BlogPost from "@/models/blog-post";
 import { PostHero } from "./_components/post-hero";
 import { PostContent } from "./_components/post-content";
 import { AuthorBio } from "./_components/author-bio";
+import ContentBlocks from "@/components/content/content-blocks";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -88,7 +89,9 @@ export default async function PostDetailPage({ params }: Props) {
       />
 
       <div className="max-w-4xl mx-auto pb-24">
-        <PostContent htmlContent={post.content_html || ""} />
+        {/* <PostContent htmlContent={post.content_html || ""} /> */}
+        <ContentBlocks blocks={post.content_blocks || []} />
+
         <div className="px-6 max-w-3xl mx-auto">
           <AuthorBio
             name={authorName}
@@ -96,6 +99,8 @@ export default async function PostDetailPage({ params }: Props) {
             image={authorImage}
           />
         </div>
+
+        {/* <pre>{JSON.stringify(post.content_blocks, null, 2)}</pre> */}
       </div>
     </main>
   );
