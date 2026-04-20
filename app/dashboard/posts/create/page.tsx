@@ -53,7 +53,7 @@ const CreatePage = () => {
           content_html: value.body?.content_html,
           content_blocks: value.body?.content_blocks,
           category: value.categoryId === "" ? undefined : value.categoryId,
-          featured_image: value.featuredImage === "" ? undefined : value.featuredImage,
+          featured_image: value.featuredImage === "" && !!value.featuredImage?._id ? undefined : value.featuredImage._id,
           published_status: value.publishedStatus || "published",
           published_at: value.publishedAt ? new Date(value.publishedAt).toISOString() : undefined,
           metadata: {

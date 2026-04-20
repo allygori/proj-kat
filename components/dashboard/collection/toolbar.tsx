@@ -42,7 +42,7 @@ export function CollectionToolbar<TData>({
           placeholder={placeholder}
           value={searchValue}
           onChange={(event) => handleSearchChange(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[200px] lg:w-[250px]"
         />
         {isFiltered && (
           <Button

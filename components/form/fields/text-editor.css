@@ -1,4 +1,4 @@
-/* @reference "../../../../globals.css"; */
+@reference "../../../app/globals.css";
 
 
 .bn-container[data-color-scheme=dark] {
@@ -18,5 +18,11 @@
 } */
 
 .bn-editor {
-  padding-inline: 54px 27px;
+  /* padding-inline: 54px 27px; */
+  @apply ps-8 pe-4 md:ps-14 md:pe-7;
+
+  /* @variant md {
+    @apply @apply ps-14 pe-7;
+  } */
 }
+

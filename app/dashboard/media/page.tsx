@@ -47,7 +47,7 @@ export default function MediaPage() {
               <LayoutGrid className="mr-2 h-4 w-4" /> Semua Media
             </TabsTrigger>
             <TabsTrigger value="trash" className="rounded-full px-6 data-[state=active]:bg-red-500 data-[state=active]:text-white transition-all font-bold text-xs uppercase tracking-wider disabled:opacity-50">
-              <Trash2 className="mr-2 h-4 w-4" /> Tempat Sampah
+              <Trash2 className="mr-2 h-4 w-4" /> Trash Bin
             </TabsTrigger>
           </TabsList>
         </div>

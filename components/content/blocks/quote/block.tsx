@@ -20,18 +20,20 @@ const Quote = ({ content = [], properties = {}, children }: QuoteProps) => {
     customStyle.backgroundColor = properties.backgroundColor;
   }
 
-  const alignClass = properties.textAlignment 
-    ? `text-${properties.textAlignment}` 
+  const alignClass = properties.textAlignment
+    ? `text-${properties.textAlignment}`
     : "text-left";
 
   return (
     <>
-      <blockquote 
-        className={cn("my-6 border-l-4 border-slate-300 pl-4 py-1 text-lg italic text-slate-600 bg-slate-50 rounded-r-md dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400", alignClass)} 
+      <blockquote
+        className={cn("mt-4 mb-2 mx-4 md:mx-6 text-lg font-bold text-slate-800 dark:text-primary-foreground", alignClass)}
         style={customStyle}
       >
         {content.length > 0 ? RenderInlineContent(content) : <br />}
       </blockquote>
+
+      <div className="mt-0 mb-4 mx-4 md:mx-6 border-b-6 border-slate-800 dark:border-primary-foreground w-1/5 md:w-1/6" />
 
       {/* Render nested blocks if any */}
       {children && children.length > 0 && (

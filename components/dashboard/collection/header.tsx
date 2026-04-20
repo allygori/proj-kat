@@ -31,8 +31,8 @@ export function CollectionHeader({
             size="sm"
             onClick={() => window.location.href = createUrl}
           >
-            <Plus className="size-4 mr-2" />
-            <span className="hidden lg:inline">{createText}</span>
+            <Plus className="size-4" />
+            <span className="inline">{createText}</span>
           </Button>
         </div>
       )}
