@@ -4,7 +4,16 @@ import Paragraph from "./paragraph/block";
 import ImageBlock from "./image/block";
 import Quote from "./quote/block";
 import TableBlock from "./table/block";
-import { ListItem } from "./list/block";
+import BulletListItem from "./list/bullet-list-item/block";
+import NumberedListItem from "./list/numbered-list-item/block";
+import CheckListItem from "./list/check-list-item/block";
+import ToggleListItem from "./list/toggle-list-item/block";
+import DividerBlock from "./divider/block";
+import PageBreakBlock from "./page-break/block";
+import VideoBlock from "./video/block";
+import AudioBlock from "./audio/block";
+import FileBlock from "./file/block";
+import CodeBlock from "./code-block/block";
 
 type RenderBlockProps = {
   block: Block;
@@ -20,7 +29,6 @@ const RenderBlock = ({ block }: RenderBlockProps) => {
           key={block.id}
           content={block.content as Content[]}
           properties={block.props}
-          children={block.children}
         />
       );
     case 'heading':
@@ -37,7 +45,6 @@ const RenderBlock = ({ block }: RenderBlockProps) => {
         <ImageBlock
           key={block.id}
           properties={block.props}
-          children={block.children}
         />
       );
     case 'quote':
@@ -46,7 +53,6 @@ const RenderBlock = ({ block }: RenderBlockProps) => {
           key={block.id}
           content={block.content as Content[]}
           properties={block.props}
-          children={block.children}
         />
       );
     case 'table':
@@ -55,18 +61,62 @@ const RenderBlock = ({ block }: RenderBlockProps) => {
           key={block.id}
           content={block.content as TableContent}
           properties={block.props}
-          children={block.children}
         />
       );
     case 'bulletListItem':
-    case 'numberedListItem':
-      // Fallback single render if called directly outside of a list group
       return (
-        <ListItem 
+        <BulletListItem 
           key={block.id}
           content={block.content as Content[]}
           properties={block.props}
           children={block.children}
+        />
+      );
+    case 'numberedListItem':
+      return (
+        <NumberedListItem 
+          key={block.id}
+          content={block.content as Content[]}
+          properties={block.props}
+          children={block.children}
+        />
+      );
+    case 'checkListItem':
+      return (
+        <CheckListItem 
+          key={block.id}
+          content={block.content as Content[]}
+          properties={block.props}
+          children={block.children}
+        />
+      );
+    case 'toggleListItem':
+      return (
+        <ToggleListItem 
+          key={block.id}
+          content={block.content as Content[]}
+          properties={block.props}
+          children={block.children}
+        />
+      );
+    case 'divider':
+      return <DividerBlock key={block.id} />;
+    case 'pageBreak':
+    case 'page-break':
+      return <PageBreakBlock key={block.id} />;
+    case 'video':
+      return <VideoBlock key={block.id} properties={block.props} />;
+    case 'audio':
+      return <AudioBlock key={block.id} properties={block.props} />;
+    case 'file':
+      return <FileBlock key={block.id} properties={block.props} />;
+    case 'codeBlock':
+    case 'code-block':
+      return (
+        <CodeBlock 
+          key={block.id} 
+          content={block.content as Content[]} 
+          properties={block.props} 
         />
       );
     default:

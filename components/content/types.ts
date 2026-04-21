@@ -19,6 +19,9 @@ export type Properties = {
   url?: string; 
   caption?: string;
   name?: string;
+  checked?: boolean;
+  language?: string; // For code blocks
+  isToggleable?: boolean; // For toggleable headings (toggle wrapper)
   [key: string]: any;
 };
 
@@ -42,13 +45,25 @@ export type CustomInlineContent = {
 
 export type InlineContent = Link | StyledText | CustomInlineContent;
 
+export type TableCell = {
+  type: "tableCell";
+  content: InlineContent[];
+  props: {
+    colspan?: number;
+    rowspan?: number;
+    backgroundColor?: string;
+    textColor?: string;
+    textAlignment?: "left" | "center" | "right" | "justify";
+  };
+};
+
 export type TableContent = {
   type: "tableContent";
-  columnWidths: (number | undefined)[];
+  columnWidths: (number | null | undefined)[];
   headerRows?: number;
   headerCols?: number;
   rows: {
-    cells: InlineContent[][];
+    cells: TableCell[];
   }[];
 };
 

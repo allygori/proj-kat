@@ -1,15 +1,13 @@
-import { Block, Content, Properties } from "../../types";
+import { Content, Properties } from "../../types";
 import RenderInlineContent from "../../render-inline-content";
-import RenderBlock from "../render-block";
 import { cn } from "@/lib/utils";
 
 type ParagraphProps = {
   content?: Content[];
   properties?: Properties;
-  children?: Block[];
 }
 
-const Paragraph = ({ content = [], properties = {}, children }: ParagraphProps) => {
+const Paragraph = ({ content = [], properties = {} }: ParagraphProps) => {
 
   const customStyle: React.CSSProperties = {};
   if (properties.textColor && properties.textColor !== "default") {
@@ -24,23 +22,12 @@ const Paragraph = ({ content = [], properties = {}, children }: ParagraphProps) 
     : "text-left";
 
   return (
-    <>
-      <p
-        className={cn("py-1 leading-relaxed text-slate-800 dark:text-slate-200", alignClass, content.length > 0 ? "my-2" : "my-0")}
-        style={customStyle}
-      >
-        {content.length > 0 ? RenderInlineContent(content) : <br />}
-      </p>
-
-      {/* Render nested blocks if any */}
-      {children && children.length > 0 && (
-        <div className="pl-6 space-y-2">
-          {children.map((child: Block) => (
-            <RenderBlock key={child.id} block={child} />
-          ))}
-        </div>
-      )}
-    </>
+    <p
+      className={cn("text-slate-800 dark:text-slate-200", alignClass, content.length > 0 ? "my-2 py-1 leading-relaxed" : "my-0 leading-0.5")}
+      style={customStyle}
+    >
+      {content.length > 0 ? RenderInlineContent(content) : <br />}
+    </p>
   )
 }
 
