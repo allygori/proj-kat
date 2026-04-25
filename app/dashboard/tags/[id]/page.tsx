@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useState, useMemo } from "react";
-import CategoryForm from "../../_components/tag.form";
+import CategoryForm from "../_components/tag.form";
 import { toast } from "sonner";
 import { z } from "zod";
 // import { revalidateLogic, useStore } from "@tanstack/react-form";

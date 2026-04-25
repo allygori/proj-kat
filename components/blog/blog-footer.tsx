@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Mail, Linkedin, Twitter } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Logo from '../svgs/logo';
 
 type BlogFooterProps = {
   className?: string;
@@ -39,7 +40,7 @@ export function BlogFooter({ className = "" }: BlogFooterProps) {
           {/* Branding */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2">
-              <div
+              {/* <div
                 className="flex h-7 w-7 items-center justify-center rounded-md"
                 style={{ background: '#155E88' }}
               >
@@ -47,8 +48,11 @@ export function BlogFooter({ className = "" }: BlogFooterProps) {
                   <path d="M3 13L8 3L13 13" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M5 9.5h6" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" />
                 </svg>
+              </div> */}
+              <div className="flex items-center justify-center">
+                <Logo className="h-6 w-6" />
               </div>
-              <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
+              <span className="text-base font-bold tracking-tight text-primary dark:text-white">
                 Katalis
               </span>
             </div>
