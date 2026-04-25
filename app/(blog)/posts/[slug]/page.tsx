@@ -92,13 +92,14 @@ export default async function PostDetailPage({ params }: Props) {
         {/* <PostContent htmlContent={post.content_html || ""} /> */}
         <ContentBlocks blocks={post.content_blocks || []} />
 
-        <div className="px-6 max-w-3xl mx-auto">
+        {/* @TODO: fix author bio: pic, social and description */}
+        {/* <div className="px-6 max-w-3xl mx-auto">
           <AuthorBio
             name={authorName}
             bio={authorBio}
             image={authorImage}
           />
-        </div>
+        </div> */}
 
         {/* <pre>{JSON.stringify(post.content_blocks, null, 2)}</pre> */}
       </div>

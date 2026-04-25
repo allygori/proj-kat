@@ -17,7 +17,7 @@ export function PostHero({
   image,
 }: PostHeroProps) {
   return (
-    <header className="relative w-full h-[614px] md:h-[768px] flex items-end pb-12 md:pb-24 overflow-hidden">
+    <header className="relative w-full h-[614px] md:h-[768px] flex items-end pb-6 md:pb-12 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src={image}
@@ -32,7 +32,7 @@ export function PostHero({
         <div className="inline-block bg-[#9ecfd1] text-[#002021] px-4 py-1 rounded-full text-sm font-medium mb-6">
           {category}
         </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold text-[#191c1f] dark:text-white tracking-tight leading-tight mb-6">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-primary dark:text-white tracking-tight leading-tight mb-6">
           {title}
         </h1>
         <div className="flex items-center gap-4 text-[#717880] dark:text-slate-400 font-medium text-sm">

@@ -22,12 +22,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const scriptProps = typeof window === 'undefined' ? undefined : ({ type: 'application/json' } as const);
+  // const scriptProps = typeof window === 'undefined' ? undefined : ({ type: 'application/json' } as const);
 
   return (
     <html lang="id" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <body className={`${plusJakarta.variable} font-sans antialiased`}>
-        <ThemeProvider scriptProps={scriptProps} attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
       </body>

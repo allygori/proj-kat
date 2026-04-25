@@ -59,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           (documentsNav || []).length > 0 &&
           <NavDocuments items={documentsNav} />
         }
-        <NavSecondary items={secondaryNav} className="mt-auto" />
+        {/* <NavSecondary items={secondaryNav} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={session?.user} />

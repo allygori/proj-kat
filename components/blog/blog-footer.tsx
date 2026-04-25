@@ -2,8 +2,13 @@
 
 import Link from 'next/link';
 import { Mail, Linkedin, Twitter } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export function BlogFooter() {
+type BlogFooterProps = {
+  className?: string;
+}
+
+export function BlogFooter({ className = "" }: BlogFooterProps) {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
@@ -23,11 +28,11 @@ export function BlogFooter() {
   const socialLinks = [
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:hello@katalis.id', label: 'Email' },
+    { icon: Mail, href: 'mailto:katalis.dental@gmail.com', label: 'Email' },
   ];
 
   return (
-    <footer className="border-t border-[#E2EDF2] bg-white dark:border-slate-800 dark:bg-slate-950">
+    <footer className={cn("border-t border-[#E2EDF2] bg-white dark:border-slate-800 dark:bg-slate-950", className)}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Footer Content */}
         <div className="grid grid-cols-2 gap-8 py-12 sm:grid-cols-4 lg:grid-cols-5">

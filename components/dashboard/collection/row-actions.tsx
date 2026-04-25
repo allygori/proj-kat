@@ -60,7 +60,7 @@ export function CollectionRowActions<TData extends { _id: string, slug?: string 
       } />
       <DropdownMenuContent align="end" className="w-[160px]">
         {editUrl && (
-          <DropdownMenuItem onClick={() => window.location.href = `${editUrl}/${row.original._id}/edit`}>
+          <DropdownMenuItem onClick={() => window.location.href = `${editUrl}/${row.original._id}`}>
             Edit
           </DropdownMenuItem>
         )}

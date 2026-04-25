@@ -12,7 +12,7 @@ const ContentBlocks = ({ blocks = [] }: ContentBlocksProps) => {
   const groupedBlocks = useMemo(() => groupBlocks(blocks), [blocks]);
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-12 whitespace-pre-wrap break-words">
+    <article className="max-w-3xl mx-auto px-6 py-0 whitespace-pre-wrap break-words">
       <div className="prose prose-lg dark:prose-invert font-sans text-[#41474f] dark:text-slate-300 leading-relaxed space-y-8 max-w-none">
         {
           groupedBlocks.map((group) => {

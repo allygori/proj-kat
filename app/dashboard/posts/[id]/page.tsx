@@ -1,14 +1,14 @@
 "use client";
 
 import { use, useEffect, useState, useMemo } from "react";
-import PostForm from "../../_components/post-form";
+import PostForm from "../_components/post-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/form/form.hook";
 import { useRouter } from "next/navigation";
-import { INITIAL_BLOCK_VALUE } from "../../_components/post-form.constant";
+import { INITIAL_BLOCK_VALUE } from "../_components/post-form.constant";
 import { TagType } from "@/components/blog/types";
-import { formSchema } from "../../_components/post-form.schema";
+import { formSchema } from "../_components/post-form.schema";
 
 type PostData = any; // You can use ZodPostSchema to infer this if preferred
 

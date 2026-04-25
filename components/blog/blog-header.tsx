@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { Moon, Sun, Menu, X } from 'lucide-react';
+import Logo from '../svgs/logo';
 
 const navLinks = [
   { label: 'Beranda', href: '/' },
@@ -33,7 +34,8 @@ export function BlogHeader() {
         'sticky top-0 z-40 transition-all duration-300',
         scrolled
           ? 'border-b border-[#E2EDF2] bg-white/90 shadow-sm backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90'
-          : 'border-b border-transparent bg-white dark:bg-slate-950',
+          // : 'border-b border-transparent bg-white dark:bg-slate-950',
+          : 'border-b border-transparent bg-transparent dark:bg-slate-950',
       ].join(' ')}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -41,15 +43,17 @@ export function BlogHeader() {
           {/* Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-2.5"
+            className="group flex items-center gap-2"
             aria-label="Katalis — kembali ke beranda"
           >
             {/* Icon mark */}
-            <div
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-              style={{ background: '#155E88' }}
-            >
-              <svg
+            {/* <div
+              className="flex items-center justify-center p-2 h-8 w-8 rounded-full overflow-hidden"
+              style={{ background: '#a9dbdc' }}
+            > */}
+            <div className="flex items-center justify-center">
+              <Logo className="h-6 w-6" />
+              {/* <svg
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
@@ -69,10 +73,10 @@ export function BlogHeader() {
                   strokeWidth="2"
                   strokeLinecap="round"
                 />
-              </svg>
+              </svg> */}
             </div>
             <span
-              className="text-lg font-bold tracking-tight text-slate-900 transition-opacity group-hover:opacity-75 dark:text-white"
+              className="text-xl font-bold tracking-tight text-primary transition-opacity group-hover:opacity-75 dark:text-white"
               style={{ letterSpacing: '-0.02em' }}
             >
               Katalis

@@ -179,7 +179,7 @@ export function ViewDrawer<T extends Record<string, any>>({ item, children, edit
               {editUrl && (
                 <Button
                   className="w-full h-11 rounded-xl shadow-sm"
-                  onClick={() => window.location.href = `${editUrl}/${item._id}/edit`}
+                  onClick={() => window.location.href = `${editUrl}/${item._id}`}
                 >
                   <Edit2 className="size-4 mr-2" />
                   Edit {isPost ? "Content" : isMedia ? "Asset" : "Details"}

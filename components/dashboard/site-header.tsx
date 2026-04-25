@@ -2,6 +2,7 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ModeToggle } from "@/components/dashboard/mode-toggle"
+import { DynamicBreadcrumb } from "./dynamic-breadcrumb"
 // import { ThemeSelector } from "@/components/dashboard/theme-selector"
 
 export function SiteHeader() {
@@ -14,6 +15,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         {/* @TODO: Add breadcrumb */}
+        <DynamicBreadcrumb />
         <h1 className="text-base font-medium"></h1>
         <div className="ml-auto flex items-center gap-2">
           {/* <Button
