@@ -10,11 +10,11 @@ import { CategoryHero } from '@/components/blog/category-hero';
 import type { BlogPostType } from '@/components/blog/types';
 
 type CategoryPageProps = {
-  params: Promise<{ category: string }>;
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: CategoryPageProps) {
-  const { category: slug } = await params;
+  const { slug } = await params;
   const name = decodeURIComponent(slug)
     .split('-')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { category: slug } = await params;
+  const { slug } = await params;
   await db.connect();
 
   // Find the category document by slug

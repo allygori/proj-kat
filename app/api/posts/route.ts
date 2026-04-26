@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     // Parse query params for pagination, sorting, and predefined filters
     const queryOptions = parseQueryParams(request, {
-      allowedFilters: ["category", "tags", "published_status", "author", "nid"],
+      allowedFilters: ["category", "tags", "published_status", "author", "nid", "categorySlug"],
       allowedSorts: ["created_at", "updated_at", "published_at", "title"],
       searchFields: ["title", "excerpt"],
     });
@@ -46,6 +46,16 @@ export async function GET(request: NextRequest) {
     // However, for MongoDB ObjectId filtering, we might need to convert them.
     if (queryOptions.filters.category) {
       baseFilter.category = queryOptions.filters.category;
+    }
+    if (queryOptions.filters.categorySlug) {
+      const Category = (await import("@/models/category")).default;
+      const categoryDoc = await Category.findOne({ slug: queryOptions.filters.categorySlug, deleted_at: null }).lean();
+      if (categoryDoc) {
+        baseFilter.category = categoryDoc._id;
+      } else {
+        // Return empty if category not found
+        baseFilter.category = null;
+      }
     }
     if (queryOptions.filters.tags) {
       // If it's a comma-separated string, convert to array

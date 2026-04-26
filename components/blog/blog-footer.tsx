@@ -39,20 +39,11 @@ export function BlogFooter({ className = "" }: BlogFooterProps) {
         <div className="grid grid-cols-2 gap-8 py-12 sm:grid-cols-4 lg:grid-cols-5">
           {/* Branding */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2">
-              {/* <div
-                className="flex h-7 w-7 items-center justify-center rounded-md"
-                style={{ background: '#155E88' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 13L8 3L13 13" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M5 9.5h6" stroke="#a9dbdc" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </div> */}
+            <div className="flex items-center gap-1">
               <div className="flex items-center justify-center">
-                <Logo className="h-6 w-6" />
+                <Logo className="h-5 w-5" />
               </div>
-              <span className="text-base font-bold tracking-tight text-primary dark:text-white">
+              <span className="text-base font-bold tracking-normal text-primary dark:text-white">
                 Katalis
               </span>
             </div>

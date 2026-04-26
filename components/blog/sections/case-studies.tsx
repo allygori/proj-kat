@@ -1,22 +1,16 @@
-// Reference: AGENTS.md § 3.1 — Case studies highlight section for blog index page
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { formatDate } from '@/lib/format';
-import { SpecialtyBadge } from './specialty-badge';
-import type { BlogPostType } from './types';
+import { SpecialtyBadge } from '../specialty-badge';
+import type { BlogPostType } from '../types';
 
-type CaseStudiesSectionProps = {
-  posts: BlogPostType[];
-};
-
-export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
-  if (!posts || posts.length === 0) return null;
+export function CaseStudiesSection({ initialPosts = [] }: { initialPosts?: BlogPostType[] }) {
+  if (!initialPosts || initialPosts.length === 0) return null;
 
   return (
     <section
-      className="rounded-2xl py-8 px-6 sm:px-8"
+      className="rounded-2xl py-8 px-6 sm:px-8 border border-primary/10"
       style={{ background: 'linear-gradient(135deg, #E8F4F8 0%, #f0fafa 100%)' }}
       aria-labelledby="case-studies-heading"
     >
@@ -38,16 +32,16 @@ export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
         </div>
         <Link
           href="/blog/category/studi-kasus"
-          className="group flex shrink-0 items-center gap-1.5 rounded-lg border border-[#155E88]/20 bg-white px-3 py-1.5 text-xs font-semibold text-[#155E88] shadow-sm transition-all hover:border-[#155E88] hover:shadow-md"
+          className="group flex shrink-0 items-center gap-1.5 rounded-lg border border-[#155E88]/20 bg-white px-3 py-1.5 text-xs font-semibold text-[#155E88] transition-all hover:border-[#155E88] hover:shadow-md"
         >
-          Lihat Semua
+          Lihat Lainnya
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 
-      {/* Cards grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.slice(0, 3).map((post) => {
+      {/* Cards carousel */}
+      <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {initialPosts.map((post) => {
           const categorySlug =
             typeof post.category === 'object' && post.category !== null
               ? (post.category as { slug?: string }).slug ?? ''
@@ -61,11 +55,11 @@ export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group flex flex-col overflow-hidden rounded-xl border border-[#a9dbdc]/30 bg-white p-4 shadow-sm transition-all hover:border-[#155E88]/30 hover:shadow-md"
+              className="group flex flex-col overflow-hidden rounded-xl border border-[#a9dbdc]/30 bg-white p-4 transition-all hover:border-primary/75 min-w-64 max-w-64 sm:min-w-72 sm:max-w-72 snap-center shrink-0"
             >
               {/* Thumbnail */}
               {post.featured_image?.url && (
-                <div className="mb-3 h-36 overflow-hidden rounded-lg bg-[#E8F4F8]">
+                <div className="mb-3 h-36 overflow-hidden rounded-lg bg-[#E8F4F8] shrink-0">
                   <Image
                     src={post.featured_image.url}
                     alt={post.featured_image.alt_text ?? post.title}
@@ -80,7 +74,7 @@ export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
               {categoryName && (
                 <SpecialtyBadge
                   specialty={categorySlug || categoryName}
-                  className="mb-2 self-start"
+                  className="mb-2 self-start shrink-0"
                 />
               )}
 
@@ -90,7 +84,7 @@ export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
               </h3>
 
               {/* Meta */}
-              <p className="mt-auto pt-3 text-xs text-slate-400">
+              <p className="mt-auto pt-3 text-xs text-slate-400 shrink-0">
                 {post.published_at ? formatDate(post.published_at) : ''}
                 {post.reading_time ? ` · ${post.reading_time} mnt baca` : ''}
               </p>

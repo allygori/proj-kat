@@ -45,10 +45,10 @@ export function CategoryHero({ category, postCount }: CategoryHeroProps) {
             >
               {category.name}
             </h1>
-            <SpecialtyBadge specialty={category.slug} size="md" />
+            {/* <SpecialtyBadge specialty={category.slug} size="md" /> */}
           </div>
           <p className="mt-3 max-w-xl text-base text-slate-500 dark:text-slate-400">
-            {description}
+            {category?.description || description}
           </p>
           {typeof postCount === 'number' && (
             <p className="mt-2 text-xs text-slate-400">
