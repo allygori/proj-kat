@@ -4,14 +4,8 @@
 // Split into featured hero + Case Studies highlight + index table with specialty filter
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
-import { formatDate } from '@/lib/format';
 import { PostIndexRow } from './post-index-row';
 import { CaseStudiesSection } from './case-studies-section';
-import { SpecialtyBadge } from './specialty-badge';
-import { PostCardHeroPrimary } from "./featured-grid/card-primary";
 import type { BlogPostType } from './types';
 import FeaturedGrid from './featured-grid/featured-grid';
 
@@ -76,14 +70,14 @@ export function BlogIndexClient({ posts, caseStudySlug = 'studi-kasus' }: BlogIn
     );
   }
 
-  const featuredCategoryName =
-    typeof featuredPost.category === 'object' && featuredPost.category !== null
-      ? (featuredPost.category as { name?: string }).name ?? ''
-      : '';
-  const featuredCategorySlug =
-    typeof featuredPost.category === 'object' && featuredPost.category !== null
-      ? (featuredPost.category as { slug?: string }).slug ?? ''
-      : '';
+  // const featuredCategoryName =
+  //   typeof featuredPost.category === 'object' && featuredPost.category !== null
+  //     ? (featuredPost.category as { name?: string }).name ?? ''
+  //     : '';
+  // const featuredCategorySlug =
+  //   typeof featuredPost.category === 'object' && featuredPost.category !== null
+  //     ? (featuredPost.category as { slug?: string }).slug ?? ''
+  //     : '';
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
@@ -124,9 +118,9 @@ export function BlogIndexClient({ posts, caseStudySlug = 'studi-kasus' }: BlogIn
           >
             Semua Tulisan
           </h2>
-          <span className="rounded-full bg-[#E8F4F8] px-2 py-0.5 text-xs font-semibold text-[#155E88] dark:bg-slate-800 dark:text-[#a9dbdc]">
+          {/* <span className="rounded-full bg-[#E8F4F8] px-2 py-0.5 text-xs font-semibold text-[#155E88] dark:bg-slate-800 dark:text-[#a9dbdc]">
             {sortedPosts.length}
-          </span>
+          </span> */}
         </div>
 
         {/* Specialty filter pills */}

@@ -6,14 +6,14 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 import { SpecialtyBadge } from './specialty-badge';
-import type { BlogPostType, TagType } from './types';
+import type { BlogPostType } from './types';
 
 type PostIndexRowProps = {
   post: BlogPostType;
 };
 
 export function PostIndexRow({ post }: PostIndexRowProps) {
-  const { title, slug, excerpt, published_at, featured_image, category, tags, reading_time } = post;
+  const { title, slug, excerpt, published_at, featured_image, category,  reading_time } = post;
 
   const categorySlug =
     typeof category === 'object' && category !== null
@@ -29,7 +29,7 @@ export function PostIndexRow({ post }: PostIndexRowProps) {
 
   return (
     <Link
-      href={`/blog/posts/${slug}`}
+      href={`/blog/${slug}`}
       className="group flex items-center gap-4 border-b border-[#E2EDF2] py-4 transition-colors hover:border-[#a9dbdc]/60 dark:border-slate-800 dark:hover:border-slate-700 sm:gap-5"
       aria-label={`Baca artikel: ${title}`}
     >
@@ -39,7 +39,7 @@ export function PostIndexRow({ post }: PostIndexRowProps) {
       </span>
 
       {/* Square thumbnail 1:1 */}
-      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[#E8F4F8] dark:bg-slate-800 sm:h-14 sm:w-14">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-[#E8F4F8] dark:bg-slate-800 sm:h-14 sm:w-14">
         {featured_image?.url ? (
           <Image
             src={featured_image.url}
@@ -67,7 +67,7 @@ export function PostIndexRow({ post }: PostIndexRowProps) {
 
       {/* Title + excerpt */}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-slate-900 transition-colors group-hover:text-[#155E88] dark:text-slate-100 dark:group-hover:text-[#a9dbdc] sm:text-base">
+        <p className="line-clamp-2 text-sm font-semibold text-slate-900 transition-colors group-hover:text-[#155E88] dark:text-slate-100 dark:group-hover:text-[#a9dbdc] sm:text-base">
           {title}
         </p>
         {excerpt && (

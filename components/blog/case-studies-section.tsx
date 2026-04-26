@@ -60,7 +60,7 @@ export function CaseStudiesSection({ posts }: CaseStudiesSectionProps) {
           return (
             <Link
               key={post.slug}
-              href={`/blog/posts/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className="group flex flex-col overflow-hidden rounded-xl border border-[#a9dbdc]/30 bg-white p-4 shadow-sm transition-all hover:border-[#155E88]/30 hover:shadow-md"
             >
               {/* Thumbnail */}

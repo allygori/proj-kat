@@ -16,12 +16,12 @@ export function BlogFooter({ className = "" }: BlogFooterProps) {
     Tulisan: [
       { label: 'Semua Tulisan', href: '/' },
       { label: 'Studi Kasus', href: '/blog/category/studi-kasus' },
-      { label: 'Ulasan Produk', href: '/blog/category/ulasan-produk' },
+      // { label: 'Ulasan Produk', href: '/blog/category/ulasan-produk' },
       { label: 'Opini', href: '/blog/category/opini' },
     ],
     Lainnya: [
       { label: 'Tentang', href: '/about' },
-      { label: 'Kontak', href: '#kontak' },
+      // { label: 'Kontak', href: '#kontak' },
       { label: 'Kebijakan Privasi', href: '#privasi' },
     ],
   };

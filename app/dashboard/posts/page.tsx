@@ -17,13 +17,13 @@ export default function PostIndexPage() {
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-[0.2em] animate-in slide-in-from-left-4 duration-500">
               <FileText className="h-4 w-4" />
-              Posts
+              Blog Posts
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Articles Library
+              Articles
             </h1>
             <p className="text-slate-500 font-medium max-w-lg dark:text-slate-400">
-              Manage title, excerpt, article body, author, category, tags, featured image and many others.
+              Manage title, excerpt, article body, author, category, tags, featured image and many.
             </p>
           </div>
         </div>

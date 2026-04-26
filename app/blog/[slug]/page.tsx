@@ -2,9 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import dbConnect from "@/lib/db";
 import BlogPost from "@/models/blog-post";
-import { PostHero } from "./_components/post-hero";
-import { PostContent } from "./_components/post-content";
-import { AuthorBio } from "./_components/author-bio";
+import { PostHero } from "@/components/blog/detail/post-hero";
+// import { AuthorBio } from "@/components/blog/detail/author-bio";
 import ContentBlocks from "@/components/content/content-blocks";
 
 type Props = {
@@ -65,9 +64,9 @@ export default async function PostDetailPage({ params }: Props) {
   }
 
   const categoryName = post.category?.name || "Uncategorized";
-  const authorName = post.author?.name || "Author at Katalis";
-  const authorBio = "Contributor at Katalis Dental."; // Static fallback if no bio field
-  const authorImage = post.author?.image;
+  // const authorName = post.author?.name || "Author at Katalis";
+  // const authorBio = "Contributor at Katalis Dental."; // Static fallback if no bio field
+  // const authorImage = post.author?.image;
 
   const dateStr = post.published_at
     ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(post.published_at))
@@ -89,7 +88,6 @@ export default async function PostDetailPage({ params }: Props) {
       />
 
       <div className="max-w-4xl mx-auto pb-24">
-        {/* <PostContent htmlContent={post.content_html || ""} /> */}
         <ContentBlocks blocks={post.content_blocks || []} />
 
         {/* @TODO: fix author bio: pic, social and description */}

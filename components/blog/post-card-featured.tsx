@@ -20,7 +20,7 @@ export function PostCardFeatured({ data, featured = false }: PostCardFeaturedPro
   });
 
   return (
-    <Link href={`/posts/${slug}`}>
+    <Link href={`/blog/${slug}`}>
       <article className="group grid grid-cols-1 gap-8 rounded-xl border border-slate-200 p-8 transition-all hover:border-slate-300 hover:shadow-lg dark:border-slate-800 dark:hover:border-slate-700 dark:hover:shadow-slate-900/20 md:grid-cols-2">
         {/* Content */}
         <div className="flex flex-col justify-between">

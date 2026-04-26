@@ -26,7 +26,7 @@ export function PostCardHeroPrimary({ data, className = "" }: PostCardHeroPrimar
     <div className={cn(className, "group")}>
       {featured_image?.url ? (
         <Link
-          href={`/posts/${slug}`}
+          href={`/blog/${slug}`}
         >
           <div className="relative h-56 sm:h-64 lg:h-[400px] rounded-2xl overflow-hidden bg-white shadow-xs transition-all">
             <Image
@@ -45,7 +45,7 @@ export function PostCardHeroPrimary({ data, className = "" }: PostCardHeroPrimar
       )}
       <div className="grid md:grid-cols-2 md:gap-4 py-4">
         <Link
-          href={`/posts/${slug}`}
+          href={`/blog/${slug}`}
           className="block"
         >
           <h2 className="text-xl font-bold leading-snug text-slate-900 transition-colors group-hover:text-[#155E88] dark:text-white dark:group-hover:text-[#a9dbdc] sm:text-2xl hover:underline group-hover:underline">
@@ -79,7 +79,7 @@ export function PostCardHeroPrimary({ data, className = "" }: PostCardHeroPrimar
           {
             excerpt && (
               <Link
-                href={`/posts/${slug}`}
+                href={`/blog/${slug}`}
               >
                 <p className="mt-2 text-sm text-slate-700 dark:text-slate-400">
                   {excerpt}

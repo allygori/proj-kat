@@ -10,11 +10,11 @@ import { Moon, Sun, Menu, X } from 'lucide-react';
 import Logo from '../svgs/logo';
 
 const navLinks = [
-  { label: 'Beranda', href: '/' },
+  // { label: 'Beranda', href: '/' },
   { label: 'Studi Kasus', href: '/blog/category/studi-kasus' },
-  { label: 'Ulasan Produk', href: '/blog/category/ulasan-produk' },
+  // { label: 'Ulasan Produk', href: '/blog/category/ulasan-produk' },
   { label: 'Opini', href: '/blog/category/opini' },
-  { label: 'Tentang', href: '/about' },
+  // { label: 'Tentang', href: '/about' },
 ];
 
 export function BlogHeader() {
@@ -46,34 +46,9 @@ export function BlogHeader() {
             className="group flex items-center gap-2"
             aria-label="Katalis — kembali ke beranda"
           >
-            {/* Icon mark */}
-            {/* <div
-              className="flex items-center justify-center p-2 h-8 w-8 rounded-full overflow-hidden"
-              style={{ background: '#a9dbdc' }}
-            > */}
+            {/* Icon */}
             <div className="flex items-center justify-center">
               <Logo className="h-6 w-6" />
-              {/* <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M3 13L8 3L13 13"
-                  stroke="#a9dbdc"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M5 9.5h6"
-                  stroke="#a9dbdc"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg> */}
             </div>
             <span
               className="text-xl font-bold tracking-tight text-primary transition-opacity group-hover:opacity-75 dark:text-white"
@@ -83,21 +58,22 @@ export function BlogHeader() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-[#E8F4F8] hover:text-[#155E88] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#a9dbdc]"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+
 
           {/* Right — theme toggle + mobile menu */}
           <div className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-[#E8F4F8] hover:text-[#155E88] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-[#a9dbdc]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               aria-label={theme === 'dark' ? 'Ganti ke mode terang' : 'Ganti ke mode gelap'}

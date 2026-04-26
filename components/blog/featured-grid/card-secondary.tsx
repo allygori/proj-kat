@@ -41,7 +41,7 @@ export function PostCardHeroSecondary({ post, className = "" }: PostCardHeroSeco
       </div>
 
       <Link
-        href={`/posts/${slug}`}
+        href={`/blog/${slug}`}
       >
         <h2 className="text-base mb-2 font-bold leading-snug text-slate-900 transition-colors group-hover:text-[#155E88] dark:text-white dark:group-hover:text-[#a9dbdc] hover:underline group-hover:underline">
           {title}
@@ -52,7 +52,7 @@ export function PostCardHeroSecondary({ post, className = "" }: PostCardHeroSeco
         {
           featured_image?.url ? (
             <Link
-              href={`/posts/${slug}`}
+              href={`/blog/${slug}`}
               className="block col-span-2"
             >
               <div className="relative aspect-square rounded-md overflow-hidden bg-white shadow-xs transition-all">
@@ -74,7 +74,7 @@ export function PostCardHeroSecondary({ post, className = "" }: PostCardHeroSeco
         {
           excerpt && (
             <Link
-              href={`/posts/${slug}`}
+              href={`/blog/${slug}`}
               className="block col-span-6"
             >
               <p className="text-sm text-slate-700 dark:text-slate-400">
