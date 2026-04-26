@@ -1,12 +1,12 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-
 # Dentistry related blog and content management system
 
 This file serves as the **single source of truth** and primary context document for any AI coding assistant (GitHub Copilot, Claude, OpenAI, Cursor, Continue.dev, etc.) working inside this repository. All code suggestions, file creations, refactors, and architectural decisions **must** strictly follow the requirements and philosophy outlined here.
+
+<!-- BEGIN:nextjs-agent-rules -->
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
 
 ## 1. Project Overview & Vision
 
@@ -37,7 +37,7 @@ The system must feel **premium, trustworthy, and medical-grade** in UI/UX while 
 | UI Component Library | Shadcn/UI                        | Latest (fully customizable)              |
 | Database           | MongoDB                             | Atlas or self-hosted                     |
 | Auth               | better-auth                         | Latest — must use its full feature set   |
-| ORM / DB Layer     | **Mongoose** (preferred) or Drizzle | Choose based on schema complexity        |
+| ORM / DB Layer     | **Mongoose** | Choose based on schema complexity        |
 | Deployment         | Vercel (primary)                    | Ready for server actions & edge          |
 | Editor             | VS Code + GitHub Copilot            | All suggestions must respect this file   |
 
@@ -66,25 +66,27 @@ The system must feel **premium, trustworthy, and medical-grade** in UI/UX while 
 - Sidebar navigation with collapsible sections
 - Dark/light mode (default: light with medical feel)
 - Top bar with user avatar, notifications, quick publish button
+- **Universal Collection Management**: Uses a generic "Collection" pattern with a Smart/Dumb component architecture for managing all resources (Posts, Category, Tags, Media) instead of collection-specific wrappers.
+- **Responsive Drawer**: Utilizes a universal `ViewDrawer` (powered by Vaul) that acts as a bottom-snap drawer on mobile and a fixed right-side panel on desktop for data preview and editing.
 - **Critical requirement**: Every table, form, and modal must be built with Shadcn components so the client (or future devs) can easily customize styling and layout without fighting a rigid CMS UI.
 
 **Main sections**:
 - Dashboard Home (analytics overview: posts published, views, etc.)
 - Blog Posts (CRUD + rich editor)
 - Media Library (upload, organize, search images/videos)
-- Categories & Tags
+- Category & Tags
 - Users & Roles (future)
 - Settings (SEO defaults, site info, affiliate disclosures)
 
 ### 3.4 Blog Management
-- Rich text editor: **TipTap** (or latest stable alternative) with dental-friendly toolbar
+- Rich text editor: **BlockNote** (stored and rendered as JSON blocks)
 - Frontmatter fields:
   - Title, slug (auto-generated + manual override)
   - Excerpt
-  - Body (TipTap content blocks json)
+  - Body (BlockNote JSON `content_blocks`)
   - Featured image (populated from Media Library)
-  - Categories (hierarchical max 3 levels)
-  - Tags (multi-select) (max 3, can create new tag from right-side drawer)
+  - Category (hierarchical max 3 levels)
+  - Tags (multi-select handled via `MultiselectField` combobox)
   - Author (linked to user)
   - Published status + scheduled publish date
   - Meta title, meta description, og:image
@@ -105,30 +107,40 @@ The system must feel **premium, trustworthy, and medical-grade** in UI/UX while 
 ```bash
 /app
 ├──── (auth)            # better-auth routes
-├──── (dashboard)       # /dashboard/* — protected admin
+├──── dashboard         # /dashboard/* — protected admin
 │     ├── layout.tsx
 │     ├── page.tsx
+│     ├── (overview)/
 │     ├── posts/
 │     ├── media/
 │     └── ...
-├──── blog            # public blog routes
+├──── blog              # public blog routes
+│     ├── [slug]/
+│     ├──── page.tsx
+│     ├── category/
+│     ├──── [slug]/
+│     ├────── page.tsx
+│     ├──── page.tsx
 │     └── page.tsx
-├──── api/              # only if needed (better-auth handles most)
+├──── api/              # API routes (including query-builder for pagination)
 ├── components/
 │   ├── ui/             # shadcn components
-│   ├── dashboard/      # admin-specific
-│   ├── blog/           # public blog components
-│   └── common/
+│   ├── dashboard/      # admin-specific UI components
+│   ├── blog/           # public blog UI components
+│   ├── form/           # universal form fields and withForm pattern wrappers
+│   ├── forms/          # specific form implementations (login, signup, etc.)
+│   ├── tables/         # universal collection table components
+│   ├── content/        # BlockNote JSON renderers
+│   └── svgs/           # icons and vectors
 ├── lib/
 │   ├── db.ts           # MongoDB connection
 │   ├── auth.ts         # better-auth config
 │   └── utils.ts
 ├── models/             # Mongoose schemas
-├── hooks/              # React hooks
-├── constant/
-├── styles/
-├── public/
-└── types/
+├── hooks/              # Custom React hooks
+├── constant/           # App constants
+├── scripts/            # DB seeding and automation scripts
+└── public/             # Static assets
 ```
 
 Use App Router exclusively. Server Components by default. Server Actions for mutations.
@@ -139,7 +151,7 @@ Always follow these rules when suggesting or generating code:
 1. TypeScript strict mode — no any, proper interfaces.
 2. Use Server Components and Server Actions wherever possible.
 3. Tailwind classes must be clean and consistent (use @apply sparingly).
-4. All forms use React Hook Form + Zod validation.
+4. All forms use **@tanstack/react-form** integrated with the project's established `withForm` pattern + Zod validation.
 5. Error handling with proper user-facing messages.
 6. Loading states with Shadcn skeletons.
 7. Accessibility (ARIA labels, keyboard navigation) — medical site standard.
