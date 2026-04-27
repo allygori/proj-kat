@@ -1,4 +1,4 @@
-// Reference: AGENTS.md § 3.2 - Proxy for protected routes and role-based access
+// proxy.ts
 import { NextRequest, NextResponse } from 'next/server';
 
 const protectedPaths = ['/dashboard'];
@@ -7,9 +7,7 @@ const authPaths = ['/login', '/signup', '/forgot-password'];
 export default async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Check if user is authenticated via better-auth session
-  // const sessionToken = request.cookies.get('better-auth.session_token')?.value;
-
+  // 1. Ambil Session Token (Better Auth)
   const sessionToken =
     request.cookies.get("better-auth.session_token") ??
     request.cookies.get("_Secure-better-auth.session_token") ??
@@ -18,16 +16,31 @@ export default async function proxy(request: NextRequest) {
       c.name.endsWith("better-auth.session_token")
     );
 
+  // 2. Proteksi Khusus Rute API
+  if (pathname.startsWith('/api')) {
+    const apiSecretHeader = request.headers.get('x-api-secret');
 
+    // Izinkan jika ada API Secret yang cocok ATAU ada Session Token
+    const isValidSecret = apiSecretHeader === process.env.INTERNAL_API_SECRET;
+    const isValidSession = !!sessionToken;
+
+    if (!isValidSecret && !isValidSession) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Invalid API Secret or Session' },
+        { status: 401 }
+      );
+    }
+    return NextResponse.next();
+  }
+
+  // 3. Proteksi Rute Halaman (Dashboard/Login)
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
   const isAuthPath = authPaths.some((path) => pathname.startsWith(path));
 
-  // If accessing protected path without session, redirect to login
   if (isProtectedPath && !sessionToken) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // If accessing auth path with session, redirect to dashboard
   if (isAuthPath && sessionToken) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
@@ -37,14 +50,10 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public (public folder)
+    /* 
+     * Sekarang mencakup rute API. 
+     * Mengecualikan file statis agar tidak membebani performa.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public|images).*)',
   ],
 };

@@ -1,89 +1,42 @@
 import { BlogHeader } from '@/components/blog/blog-header';
 import { BlogFooter } from '@/components/blog/blog-footer';
 import { BlogIndexClient } from '@/components/blog/blog-index';
-import { db } from '@/lib/db';
-import BlogPost from '@/models/blog-post';
-import Category from '@/models/category';
-import Tag from '@/models/tag';
 import type { BlogPostType } from '@/components/blog/types';
+import { fetchAPI } from '@/lib/fetch';
 
 type SearchParams = Promise<{ tag?: string }>;
 
 export default async function HomePage({ searchParams }: { searchParams: SearchParams }) {
-  await db.connect();
   const { tag } = await searchParams;
-  const now = new Date();
 
-  // 1. Fetch Featured Posts (Top 4 overall)
-  const featuredDocs = await BlogPost.find({
-    published_status: 'published',
-    published_at: { $lte: now },
-    deleted_at: null,
-  })
-    .sort({ created_at: -1 })
-    .limit(4)
-    // .populate('author', 'name')
-    .populate('featured_image')
-    .populate('category', 'name slug parent')
-    // .populate('tags', 'name slug')
-    .lean();
+  // Parallelize API calls for better performance
+  const [featuredData, caseStudiesPosts] = await Promise.all([
+    fetchAPI<BlogPostType[]>('/api/posts', {
+      params: { limit: tag ? 4 : 9, published_status: 'published' },
+      revalidate: 3600,
+    }),
+    fetchAPI<BlogPostType[]>('/api/posts', {
+      params: { limit: 5, published_status: 'published', categorySlugs: 'studi-kasus' },
+      revalidate: 3600,
+    }),
+  ]);
 
-  const featuredPosts = JSON.parse(JSON.stringify(featuredDocs ?? []));
+  let featuredPosts = [];
+  let postRowsPosts = [];
 
-  // 2. Fetch PostRows Data
-  let postRowsDocs: BlogPostType[] = [];
   if (tag) {
-    const tagDoc = await Tag.findOne({ slug: tag, deleted_at: null }).lean();
-    if (tagDoc) {
-      postRowsDocs = await BlogPost.find({
-        tags: tagDoc._id,
-        published_status: 'published',
-        published_at: { $lte: now },
-        deleted_at: null,
-      })
-        .sort({ created_at: -1 })
-        .limit(5)
-        // .populate('author', 'name')
-        .populate('featured_image')
-        .populate('category', 'name slug parent')
-        .populate('tags', 'name slug')
-        .lean();
-    }
+    // If tag is present, featuredData only contains 4 posts
+    featuredPosts = featuredData || [];
+    // Fetch posts for the specific tag
+    postRowsPosts = (await fetchAPI<BlogPostType[]>('/api/posts', {
+      params: { limit: 5, published_status: 'published', tagSlugs: tag },
+      revalidate: 3600,
+    })) || [];
   } else {
-    // If no tag selected, get posts 5 to 9
-    postRowsDocs = await BlogPost.find({
-      published_status: 'published',
-      published_at: { $lte: now },
-      deleted_at: null,
-    })
-      .sort({ created_at: -1 })
-      .skip(4)
-      .limit(5)
-      // .populate('author', 'name')
-      .populate('featured_image')
-      .populate('category', 'name slug parent')
-      .populate('tags', 'name slug')
-      .lean();
-  }
-
-  const postRowsPosts = JSON.parse(JSON.stringify(postRowsDocs ?? []));
-
-  // 3. Fetch Case Studies
-  let caseStudiesPosts = [];
-  const caseStudyCategory = await Category.findOne({ slug: 'studi-kasus', deleted_at: null }).lean();
-  if (caseStudyCategory) {
-    const csDocs = await BlogPost.find({
-      category: caseStudyCategory._id,
-      published_status: 'published',
-      published_at: { $lte: now },
-      deleted_at: null,
-    })
-      .sort({ created_at: -1 })
-      .limit(5)
-      .populate('featured_image')
-      .populate('category', 'name slug')
-      .lean();
-    caseStudiesPosts = JSON.parse(JSON.stringify(csDocs ?? []));
+    // If no tag, featuredData contains 9 posts (4 featured + 5 rows)
+    const allPosts = featuredData || [];
+    featuredPosts = allPosts.slice(0, 4);
+    postRowsPosts = allPosts.slice(4, 9);
   }
 
   return (

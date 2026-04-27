@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     // Parse query params for pagination, sorting, and predefined filters
     const queryOptions = parseQueryParams(request, {
-      allowedFilters: ["category", "tags", "published_status", "author", "nid", "categorySlug"],
+      allowedFilters: ["category", "tags", "published_status", "author", "nid", "categorySlugs", "tagSlugs"],
       allowedSorts: ["created_at", "updated_at", "published_at", "title"],
       searchFields: ["title", "excerpt"],
     });
@@ -44,19 +44,28 @@ export async function GET(request: NextRequest) {
     // If query has tags, we use $in or similar if needed. 
     // queryOptions.filters already has values from searchParams.
     // However, for MongoDB ObjectId filtering, we might need to convert them.
+
+    // category id
     if (queryOptions.filters.category) {
       baseFilter.category = queryOptions.filters.category;
     }
-    if (queryOptions.filters.categorySlug) {
+
+    // category slugs
+    if (queryOptions.filters.categorySlugs) {
+      const _categorySlugs = typeof queryOptions.filters.categorySlugs === "string"
+        ? queryOptions.filters.categorySlugs.split(",")
+        : queryOptions.filters.categorySlugs;
       const Category = (await import("@/models/category")).default;
-      const categoryDoc = await Category.findOne({ slug: queryOptions.filters.categorySlug, deleted_at: null }).lean();
-      if (categoryDoc) {
-        baseFilter.category = categoryDoc._id;
+      const categoryIds = await Category.find({ slug: { $in: _categorySlugs }, deleted_at: null }).lean();
+      if (categoryIds) {
+        baseFilter.category = { $in: categoryIds };
       } else {
         // Return empty if category not found
         baseFilter.category = null;
       }
     }
+
+    // tag IDs
     if (queryOptions.filters.tags) {
       // If it's a comma-separated string, convert to array
       const tags = typeof queryOptions.filters.tags === "string"
@@ -64,6 +73,23 @@ export async function GET(request: NextRequest) {
         : queryOptions.filters.tags;
       baseFilter.tags = { $in: tags };
     }
+
+    // tag slugs
+    if (queryOptions.filters.tagSlugs) {
+      const _tagSlugs = typeof queryOptions.filters.tagSlugs === "string"
+        ? queryOptions.filters.tagSlugs.split(",")
+        : queryOptions.filters.tagSlugs;
+
+      const Tag = (await import("@/models/tag")).default;
+      const tagIds = await Tag.find({ slug: { $in: _tagSlugs }, deleted_at: null }, { _id: 1 }).lean();
+      if (tagIds && tagIds?.length > 0) {
+        baseFilter.tags = { $in: tagIds };
+      } else {
+        // Return empty if category not found
+        baseFilter.tags = null;
+      }
+    }
+
     if (queryOptions.filters.author) {
       baseFilter.author = queryOptions.filters.author;
     }
