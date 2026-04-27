@@ -48,9 +48,9 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       <BlogHeader />
       <main className="flex-1 z-10">
         <BlogIndexClient
-          featuredPosts={featuredPosts}
-          caseStudiesPosts={caseStudiesPosts}
-          postRowsPosts={postRowsPosts}
+          featuredPosts={featuredPosts || []}
+          caseStudiesPosts={caseStudiesPosts || []}
+          postRowsPosts={postRowsPosts || []}
           activeTag={tag || ''}
         />
       </main>

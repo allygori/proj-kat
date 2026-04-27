@@ -56,9 +56,9 @@ export async function GET(request: NextRequest) {
         ? queryOptions.filters.categorySlugs.split(",")
         : queryOptions.filters.categorySlugs;
       const Category = (await import("@/models/category")).default;
-      const categoryIds = await Category.find({ slug: { $in: _categorySlugs }, deleted_at: null }).lean();
-      if (categoryIds) {
-        baseFilter.category = { $in: categoryIds };
+      const categories = await Category.find({ slug: { $in: _categorySlugs }, deleted_at: null }, { _id: 1 }).lean();
+      if (categories.length > 0) {
+        baseFilter.category = { $in: categories.map(c => c._id) };
       } else {
         // Return empty if category not found
         baseFilter.category = null;
@@ -81,9 +81,9 @@ export async function GET(request: NextRequest) {
         : queryOptions.filters.tagSlugs;
 
       const Tag = (await import("@/models/tag")).default;
-      const tagIds = await Tag.find({ slug: { $in: _tagSlugs }, deleted_at: null }, { _id: 1 }).lean();
-      if (tagIds && tagIds?.length > 0) {
-        baseFilter.tags = { $in: tagIds };
+      const tags = await Tag.find({ slug: { $in: _tagSlugs }, deleted_at: null }, { _id: 1 }).lean();
+      if (tags.length > 0) {
+        baseFilter.tags = { $in: tags.map(t => t._id) };
       } else {
         // Return empty if category not found
         baseFilter.tags = null;
