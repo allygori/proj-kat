@@ -23,9 +23,9 @@ export function BlogIndexClient({ featuredPosts, caseStudiesPosts, postRowsPosts
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl pb-24">
       {/* ── Hero section ── */}
-      <section className="pt-10 pb-12" aria-labelledby="hero-heading">
+      <section className="pt-10 pb-12 px-4 sm:px-6 lg:px-8" aria-labelledby="hero-heading">
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#155E88]/60 dark:text-slate-300">
           Jurnal & Catatan Klinis
         </p>
@@ -35,20 +35,18 @@ export function BlogIndexClient({ featuredPosts, caseStudiesPosts, postRowsPosts
         </p>
       </section>
 
-      {/* ── Featured grid: 1 large + 2 small ── */}
+      {/* ── Featured grid: 1 large + 3 small ── */}
       {featuredPost && (
-        <FeaturedGrid primary={featuredPost} secondaries={secondaryPosts} />
+        <FeaturedGrid primary={featuredPost} secondaries={secondaryPosts} className="px-4 sm:px-6 lg:px-8" />
       )}
 
       {/* ── Case Studies highlight section ── */}
       {caseStudiesPosts.length > 0 && (
-        <section className="mb-12">
-          <CaseStudiesSection initialPosts={caseStudiesPosts} />
-        </section>
+        <CaseStudiesSection initialPosts={caseStudiesPosts} className="mb-12 px-0 md:mx-8 sm:px-6 md:px-8 lg:px-8" />
       )}
 
       {/* ── All posts index table ── */}
-      <PostRows initialPosts={postRowsPosts} activeTag={activeTag} />
+      <PostRows initialPosts={postRowsPosts} activeTag={activeTag} className="px-4 sm:px-6 lg:px-8" />
 
     </div>
   );

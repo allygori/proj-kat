@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { BlogPostType } from '../types';
 import { PostCardHeroPrimary } from './card-primary'
 import { PostCardHeroSecondary } from './card-secondary';
@@ -6,11 +7,12 @@ import { PostCardHeroSecondary } from './card-secondary';
 type FeaturedGridProps = {
   primary: BlogPostType;
   secondaries: BlogPostType[];
+  className?: string;
 }
 
-const FeaturedGrid = ({ primary, secondaries }: FeaturedGridProps) => {
+const FeaturedGrid = ({ primary, secondaries, className = "" }: FeaturedGridProps) => {
   return (
-    <section className="mb-12 grid gap-6 lg:grid-cols-3 overflow-hidden" aria-label="Artikel unggulan">
+    <section className={cn("mb-12 grid gap-6 lg:grid-cols-3 overflow-hidden", className)} aria-label="Artikel unggulan">
       <PostCardHeroPrimary data={primary} className="lg:col-span-2" />
 
       <div className="flex flex-col gap-4">
